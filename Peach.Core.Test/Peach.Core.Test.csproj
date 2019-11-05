@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnitTestAdapter.2.2.0\build\NUnitTestAdapter.props" Condition="Exists('..\packages\NUnitTestAdapter.2.2.0\build\NUnitTestAdapter.props')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{95A87A7C-4108-408F-BE4B-FC5657A2DDE0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Peach.Core.Test</RootNamespace>
+    <AssemblyName>Peach.Core.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>Peach.Core.Test.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Peach.Core.Test.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Peach.Core.Test.Proxy.ProxyTests</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.7\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.7.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.7\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Agent\AgentTests.cs" />
+    <Compile Include="Analyzers\AnalyzerTests.cs" />
+    <Compile Include="Analyzers\BinaryAnalyzerTests.cs" />
+    <Compile Include="Analyzers\StringTokenTests.cs" />
+    <Compile Include="Analyzers\XmlAnalyzerTests.cs" />
+    <Compile Include="BitsTests.cs" />
+    <Compile Include="BitStreamTest.cs" />
+    <Compile Include="BitwiseStreamTest.cs" />
+    <Compile Include="CrackingTests\ArrayTests.cs" />
+    <Compile Include="CrackingTests\BlobTests.cs" />
+    <Compile Include="CrackingTests\BlockTests.cs" />
+    <Compile Include="CrackingTests\ChoiceTests.cs" />
+    <Compile Include="CrackingTests\ContraintTests.cs" />
+    <Compile Include="CrackingTests\CountRelationTests.cs" />
+    <Compile Include="CrackingTests\FlagsTests.cs" />
+    <Compile Include="CrackingTests\LengthTests.cs" />
+    <Compile Include="CrackingTests\NumberTests.cs" />
+    <Compile Include="CrackingTests\OffsetRelationTests.cs" />
+    <Compile Include="CrackingTests\PaddingTests.cs" />
+    <Compile Include="CrackingTests\PlacementTests.cs" />
+    <Compile Include="CrackingTests\SizeRelationTests.cs" />
+    <Compile Include="CrackingTests\StringTests.cs" />
+    <Compile Include="CrackingTests\TokenTests.cs" />
+    <Compile Include="CrackingTests\XmlTests.cs" />
+    <Compile Include="DataModelCollector.cs" />
+    <Compile Include="DomGeneralTests.cs" />
+    <Compile Include="EncodingTests.cs" />
+    <Compile Include="FixupCloneTests.cs" />
+    <Compile Include="Fixups\Asn1LengthFixupTests.cs" />
+    <Compile Include="Fixups\CiscoFixupTests.cs" />
+    <Compile Include="Fixups\CMACFixupTests.cs" />
+    <Compile Include="Fixups\CopyValueFixupTests.cs" />
+    <Compile Include="Fixups\Crc32DualFixupTests.cs" />
+    <Compile Include="Fixups\CrcFixupTests.cs" />
+    <Compile Include="Fixups\ExpressionFixupTests.cs" />
+    <Compile Include="Fixups\FixupRelationsTest.cs" />
+    <Compile Include="Fixups\GMACFixupTests.cs" />
+    <Compile Include="Fixups\HMACFixupTests.cs" />
+    <Compile Include="Fixups\IcmpChecksumFixupTests.cs" />
+    <Compile Include="Fixups\IcmpV6ChecksumFixupTest.cs" />
+    <Compile Include="Fixups\LRCFixupTests.cs" />
+    <Compile Include="Fixups\MD5FixupTests.cs" />
+    <Compile Include="Fixups\ScriptFixupTests.cs" />
+    <Compile Include="Fixups\SequenceIncrementFixupTests.cs" />
+    <Compile Include="Fixups\SequenceRandomFixupTests.cs" />
+    <Compile Include="Fixups\SHA1FixupTests.cs" />
+    <Compile Include="Fixups\SHA224FixupTests.cs" />
+    <Compile Include="Fixups\SHA256FixupTests.cs" />
+    <Compile Include="Fixups\SHA384FixupTests.cs" />
+    <Compile Include="Fixups\SHA512FixupTests.cs" />
+    <Compile Include="Fixups\TCPChecksumFixupTests.cs" />
+    <Compile Include="Fixups\UDPChecksumFixupTests.cs" />
+    <Compile Include="LoggerTests.cs" />
+    <Compile Include="Monitors\CleanupFolderMoniorTests.cs" />
+    <Compile Include="Monitors\FaultingMonitorTests.cs" />
+    <Compile Include="Monitors\MemoryMonitorTests.cs" />
+    <Compile Include="Monitors\PcapMonitorTests.cs" />
+    <Compile Include="Monitors\PingMonitorTests.cs" />
+    <Compile Include="Monitors\ProcessKillerMoniorTests.cs" />
+    <Compile Include="Monitors\ProcessMonitorTests.cs" />
+    <Compile Include="Monitors\ReplayMonitorTests.cs" />
+    <Compile Include="Monitors\RunCommandTests.cs" />
+    <Compile Include="Monitors\SocketMonitorTests.cs" />
+    <Compile Include="Monitors\SshMonitorTests.cs" />
+    <Compile Include="Monitors\VmwareMonitorTests.cs" />
+    <Compile Include="MutationStrategies\RandomDeterministicTest.cs" />
+    <Compile Include="MutationStrategies\RandomStrategyTests.cs" />
+    <Compile Include="MutationStrategies\SequentialTest.cs" />
+    <Compile Include="Mutators\ArrayNumericalEdgeCasesMutatorTests.cs" />
+    <Compile Include="Mutators\ArrayRandomizeOrderMutatorTests.cs" />
+    <Compile Include="Mutators\ArrayReverseOrderMutatorTests.cs" />
+    <Compile Include="Mutators\ArrayVarianceMutatorTests.cs" />
+    <Compile Include="Mutators\BlobBitFlipperMutatorTests.cs" />
+    <Compile Include="Mutators\BlobDWORDSliderMutatorTests.cs" />
+    <Compile Include="Mutators\BlobMutatorTests.cs" />
+    <Compile Include="Mutators\DataElementDuplicateMutatorTests.cs" />
+    <Compile Include="Mutators\DataElementRemoveMutatorTests.cs" />
+    <Compile Include="Mutators\DataElementSwapNearNodesMutatorTests.cs" />
+    <Compile Include="Mutators\FiniteRandomNumbersMutatorTests.cs" />
+    <Compile Include="Mutators\NoMutatorTests.cs" />
+    <Compile Include="Mutators\NumericalEdgeCaseMutatorTests.cs" />
+    <Compile Include="Mutators\NumericalVarianceMutatorTests.cs" />
+    <Compile Include="Mutators\SizedDataNumericalEdgeCasesMutatorTests.cs" />
+    <Compile Include="Mutators\SizedDataVaranceMutatorTests.cs" />
+    <Compile Include="Mutators\SizedNumericalEdgeCasesMutatorTests.cs" />
+    <Compile Include="Mutators\SizedVarianceMutatorTests.cs" />
+    <Compile Include="Mutators\StringCaseMutatorTests.cs" />
+    <Compile Include="Mutators\StringMutatorTests.cs" />
+    <Compile Include="Mutators\UnicodeBadUtf8MutatorTests.cs" />
+    <Compile Include="Mutators\UnicodeBomMutatorTests.cs" />
+    <Compile Include="Mutators\UnicodeStringsMutatorTests.cs" />
+    <Compile Include="Mutators\UnicodeUtf8ThreeCharMutatorTests.cs" />
+    <Compile Include="Mutators\ValidValuesMutatorTests.cs" />
+    <Compile Include="Mutators\WordListMutatorTests.cs" />
+    <Compile Include="Mutators\XmlW3CMutatorTests.cs" />
+    <Compile Include="ObjectCopierTests.cs" />
+    <Compile Include="OutputTests\SizeRelationTests.cs" />
+    <Compile Include="PeachXPathTests.cs" />
+    <Compile Include="PitParserTests\ArrayTests.cs" />
+    <Compile Include="PitParserTests\BlobTests.cs" />
+    <Compile Include="PitParserTests\BlockTests.cs" />
+    <Compile Include="PitParserTests\ChoiceTests.cs" />
+    <Compile Include="PitParserTests\DefaultsTests.cs" />
+    <Compile Include="PitParserTests\DefaultValuesTests.cs" />
+    <Compile Include="PitParserTests\FlagTests.cs" />
+    <Compile Include="PitParserTests\GeneralTests.cs" />
+    <Compile Include="PitParserTests\IncludeTests.cs" />
+    <Compile Include="PitParserTests\MiscTests.cs" />
+    <Compile Include="PitParserTests\NumberTests.cs" />
+    <Compile Include="PitParserTests\PaddingTests.cs" />
+    <Compile Include="PitParserTests\RefTests.cs" />
+    <Compile Include="PitParserTests\StringTests.cs" />
+    <Compile Include="PitParserTests\TestTests.cs" />
+    <Compile Include="PitParserTests\XmlTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\ProxyTests.cs" />
+    <Compile Include="Proxy\Web\SmokeTests.cs" />
+    <Compile Include="Publishers\ConsoleHexPublisher.cs" />
+    <Compile Include="Publishers\FilePerIterationTests.cs" />
+    <Compile Include="Publishers\FilePublisherTests.cs" />
+    <Compile Include="Publishers\HttpPublisherTests.cs" />
+    <Compile Include="Publishers\InputTests.cs" />
+    <Compile Include="Publishers\ParameterTests.cs" />
+    <Compile Include="Publishers\RemotePubilsherTests.cs" />
+    <Compile Include="Publishers\SocketPublisherTests.cs" />
+    <Compile Include="Publishers\TcpListenerPublisherTests.cs" />
+    <Compile Include="Publishers\TcpPublisherTests.cs" />
+    <Compile Include="RandomTest.cs" />
+    <Compile Include="RelationCloneTests.cs" />
+    <Compile Include="RelationCountTests.cs" />
+    <Compile Include="RelationOffsetTest.cs" />
+    <Compile Include="RelationSizeTest.cs" />
+    <Compile Include="ReportedTests.cs" />
+    <Compile Include="RunTests.cs" />
+    <Compile Include="SchemaTests.cs" />
+    <Compile Include="StateModel\ActionTests.cs" />
+    <Compile Include="StateModel\ActionWhenTests.cs" />
+    <Compile Include="StateModel\InputTests.cs" />
+    <Compile Include="StateModel\OutputTests.cs" />
+    <Compile Include="StateModel\SlurpTests.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="Transformers\Asn1\DerEncodeIntegerTests.cs" />
+    <Compile Include="Transformers\Asn1\DerEncodePrintableStringTests.cs" />
+    <Compile Include="Transformers\Compress\Bz2CompressTests.cs" />
+    <Compile Include="Transformers\Compress\Bz2DecompressTests.cs" />
+    <Compile Include="Transformers\Compress\GzipCompressTests.cs" />
+    <Compile Include="Transformers\Compress\GzipDecompressTests.cs" />
+    <Compile Include="Transformers\Crypto\AesCBCTests.cs" />
+    <Compile Include="Transformers\Crypto\AesGcmTests.cs" />
+    <Compile Include="Transformers\Crypto\AesKwTests.cs" />
+    <Compile Include="Transformers\Crypto\ApacheMd5CryptTests.cs" />
+    <Compile Include="Transformers\Crypto\CryptTests.cs" />
+    <Compile Include="Transformers\Crypto\CvsScrambleTests.cs" />
+    <Compile Include="Transformers\Crypto\HmacTests.cs" />
+    <Compile Include="Transformers\Crypto\Md5Tests.cs" />
+    <Compile Include="Transformers\Crypto\Sha1Tests.cs" />
+    <Compile Include="Transformers\Crypto\Sha256Tests.cs" />
+    <Compile Include="Transformers\Crypto\TripleDesTests.cs" />
+    <Compile Include="Transformers\Crypto\UnixMd5CryptTests.cs" />
+    <Compile Include="Transformers\Encode\Base64DecodeTests.cs" />
+    <Compile Include="Transformers\Encode\Base64EncodeTests.cs" />
+    <Compile Include="Transformers\Encode\HDLCEncodeTests.cs" />
+    <Compile Include="Transformers\Encode\HexTests.cs" />
+    <Compile Include="Transformers\Encode\HtmlDecodeTests.cs" />
+    <Compile Include="Transformers\Encode\HtmlEncodeTests.cs" />
+    <Compile Include="Transformers\Encode\Ipv4StringToOctetTests.cs" />
+    <Compile Include="Transformers\Encode\Ipv6StringToOctetTests.cs" />
+    <Compile Include="Transformers\Encode\JsEncodeTests.cs" />
+    <Compile Include="Transformers\Encode\NetBiosDecodeTests.cs" />
+    <Compile Include="Transformers\Encode\NetBiosEncodeTests.cs" />
+    <Compile Include="Transformers\Encode\SidStringToBytesTests.cs" />
+    <Compile Include="Transformers\Encode\UrlEncodeTests.cs" />
+    <Compile Include="Transformers\EvalTests.cs" />
+    <Compile Include="Transformers\NullTests.cs" />
+    <Compile Include="Transformers\TransformerTests.cs" />
+    <Compile Include="Transformers\Type\IntToHexTests.cs" />
+    <Compile Include="UtilitiesTests.cs" />
+    <Compile Include="VariantTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Peach.Core.Test.ruleset" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Peach.Core\Peach.Core.csproj">
+      <Project>{DD90CD92-F47E-4DB1-8579-37FD682C1743}</Project>
+      <Name>Peach.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnitTestAdapter.2.2.0\build\NUnitTestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnitTestAdapter.2.2.0\build\NUnitTestAdapter.props'))" />
+  </Target>
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
