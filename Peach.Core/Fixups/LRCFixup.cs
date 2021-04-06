@@ -64,7 +64,9 @@ namespace Peach.Core.Fixups
 			lrc = (byte)(((lrc ^ 0xff) + 1) % 0xff);
 
 			if (parent is Dom.String)
+
 				return new Variant(lrc.ToString());
+
 
 			if (parent is Dom.Number)
 				return new Variant((uint)lrc);

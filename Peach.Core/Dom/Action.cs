@@ -304,7 +304,9 @@ namespace Peach.Core.Dom
 
 				if (!(bool)value)
 				{
+
 					logger.Debug("Run: action '{0}' when returned false", name);
+
 					return;
 				}
 			}
@@ -344,7 +346,11 @@ namespace Peach.Core.Dom
 
 				OnStarting();
 
+
+
 				logger.Debug("ActionType.{0}", GetType().Name.ToString());
+
+
 
 				RunScript(onStart);
 

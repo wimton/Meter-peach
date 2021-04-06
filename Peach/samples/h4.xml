@@ -1,0 +1,174 @@
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- 7E A01E 0321 93 CD3B 8180120501F80601F8070400000001080400000001 55B6 7E SNRM from MAP-->
+<!-- 7E A020 2103 73 7398 81801405020080060200F8070400000001080400000001 87CB 7E UA from E450 S4 -->
+  <Defaults>
+    <Number signed="false" />
+</Defaults>
+
+	<DataModel name="StdOptions">
+	<Blob name="Options" value="0501F80601F8070400000001080400000001" valueType="hex" />
+	</DataModel>
+	
+	<DataModel name="InfoPayload"> <!-- GB 8.3.2 LLC PDU format -->
+		<Number name="ToSAP" size="8"  value="E6" valueType="hex" /> 
+		<Number name="FromSAP" size="8" value="E6" valueType="hex" /> <!-- the value of the Source_LSAP is 0xE6 or 0xE7. The last bit is used as a command/response identifier: 0 means ‘command’ and 1 means “response” -->
+		<Number name="QoS" size="8"  value="00" valueType="hex"/> <!-- QoS. RFU, 0 for the moment -->
+		<Number name="DLMS_PDU" size="8"  value="60" valueType="hex"/> <!-- ApplicationAssociationRequest  --> 
+		<Number name="Length" size="8" >
+			<Relation type="size" lengthType="bytes" of="Content" />
+		</Number>
+		<Block name="Content"> 
+			<Blob name="Version" value="80020780" valueType="hex" minOccurs="0" />
+			<Blob name="Application-context-name" value="A109060760857405080102" valueType="hex" />
+			<Blob name="AE-invocation-identifier" value="A903020110" valueType="hex" />
+			<Blob name="Association-information" value="BE0F040D01000000065F04001C13200000" valueType="hex" />
+		</Block>
+	</DataModel>
+
+ 	<DataModel name="Ctl">
+		<Flags name="InfoField" size="8">
+			<Flag name="Bit1" position="0" size="1" />
+			<Flag name="NS" position="1" size="3"/>
+			<Flag name="PF" position="4" size="1"/>
+			<Flag name="NR" position="5" size="3"/>
+		</Flags>
+	</DataModel>
+
+ 	<DataModel name="Option">
+	  <Number name="Length" size="8" >
+	  	<Relation type="size" lengthType="bytes" of="Content" />
+	  </Number>
+	  <Choice name="Content">
+	  <Block name="Byte">
+	   <Number name="Param" size="8" />
+	   <Number name="Value" size="8" />
+	  </Block>
+	  <Block name="Int">
+	   <Number name="Param" size="8" />
+	   <Number name="Value" size="16" />
+	  </Block>
+	  <Block name="Long">
+	   <Number name="Param" size="8" />
+	   <Number name="Value" size="32" />
+	  </Block>
+	   </Choice>
+	</DataModel>
+ 
+  	<DataModel name="Options">
+	 <Number name="Tag" size="16" value="8180" valueType="hex" token="true" mutable="false"/><!-- Format Identifier (81H) and Group Identifier (80H) -->
+	  <Number name="Length" size="8" >
+	  	<Relation type="size" lengthType="bytes" of="Content" />
+	  </Number>
+	  <Block name="Content">
+	    <Choice name="Content">
+			<Block ref="StdOptions"/>	   
+			<Block ref="Option" minOccurs="1" maxOccurs="10" />
+	   </Choice> 
+	  </Block>
+	</DataModel>
+  
+  	<DataModel name="HeaderInfo"> <!-- 8.4.2.2 Address field structure -->
+		<Choice>
+			<Block>
+				<Number size="8" value="03" valueType="hex"/>
+			</Block>
+			<Block>
+			<Number size="16" value="0103" valueType="hex"/>
+			</Block>
+		</Choice>
+		<Number name="FromAddr" size="8" value="21" valueType="hex"/>
+		<Number name="Ctl" size="8" value="10" valueType="hex" token="true" mutable="false"/>
+	</DataModel>
+ 
+	<DataModel name="Packet">
+	<Block name="Frame">
+		<Block name="Header">
+		  <Number name="Type" size="8" value="A0" valueType="hex" token="true" mutable="false"/>
+		  <Number name="Length" size="8" > <!-- Add the length of the FCS -->
+			<Relation type="size" lengthType="bytes" of="Frame" expressionGet="size-2" expressionSet="size+2"  />
+		  </Number>
+	      <Block ref="HeaderInfo"/>
+		</Block>
+		<Number name="HCS" size="16" >
+			<Fixup class="CrcFixup">
+				<Param name="ref" value="Header"/>
+				<Param name="type" value="CRC_DLMS"/>
+			</Fixup>
+		</Number>
+		<Blob name="Payload"/>
+	</Block>
+		<Number name="FCS" size="16" >
+			<Fixup class="CrcFixup">
+				<Param name="ref" value="Frame"/>
+				<Param name="type" value="CRC_DLMS"/>
+			</Fixup>
+		</Number>
+	</DataModel>
+
+	<DataModel name="SNRM" ref="Packet" >
+	 <Block name="Frame.Header.HeaderInfo">
+		<Number name="Ctl" size="8" value="93" valueType="hex" token="true" mutable="false"/>
+	</Block>
+	<Block name="Frame.Payload" ref="Options"/>
+	</DataModel>
+
+	<DataModel name="UA" ref="Packet" >
+	 <Block name="Frame.Header.HeaderInfo">
+		  <Number name="Ctl" size="8" value="73" valueType="hex" token="true" mutable="false"/>
+	 </Block>
+	<Block name="Frame.Payload" ref="Options"/>
+	</DataModel>
+
+	<DataModel name="ARQ" ref="Packet" >
+	 <Block name="Frame.Header.HeaderInfo">
+		  <Number name="Ctl" size="8" value="00" valueType="hex" token="true" mutable="false"/>
+	 </Block>
+	<Block name="Frame.Payload" ref="InfoPayload"/>
+	</DataModel>
+	
+	
+	<StateModel name="StateModel" initialState="InitialState">
+		<State name="InitialState">
+			<Action name="SendSNRM" type="output">
+				<DataModel ref="SNRM"/>
+			</Action>
+			<Action ref="SNRMSent" type="changeState" />
+		</State>
+		<State name="SNRMSent">
+			<Action name="SNRMresp" type="input">
+				<DataModel ref="Packet"/>
+			</Action>
+			<Action  when="Packet.HeaderInfo.Ctl==0x73"  ref="UAreceived" type="changeState" />
+		</State>
+		<State name="UAreceived">
+			<Action name="ARQ" type="output">
+				<DataModel ref="ARQ"/>
+			</Action>
+		</State>
+	</StateModel>
+
+
+	<StateModel name="TheStateModel" initialState="InitialState">
+		<State name="InitialState">
+			<Action name="SendSNRM" type="output">
+				<DataModel ref="SNRM"/>
+			</Action>
+		</State>
+		<State name="SNRMSent">
+			<Action name="SNRMresp" type="input">
+				<DataModel ref="UA"/>
+			</Action>
+		</State>
+	</StateModel>
+
+	<Test name="Default">
+		<StateModel ref="StateModel"/>
+		<Publisher class="File">
+			<Param name="FileName" value="fuzzfile.bin"/>
+		</Publisher>
+		<Logger class="Filesystem">
+			<Param name="Path" value="logs"/>
+		</Logger>   
+	</Test>
+</Peach>

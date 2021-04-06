@@ -70,7 +70,9 @@ namespace Peach.Core
 			var name = baseName;
 
 			for (int i = 1; Contains(name); ++i)
+
 				name = string.Format("{0}_{1}", baseName, i);
+
 
 			return name;
 		}

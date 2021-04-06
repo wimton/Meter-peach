@@ -99,7 +99,9 @@ namespace Peach.Core.Proxy.Web
 
 			match = Regex.Match(data, @";\s*Expires=([^;]+)");
 			if (match != null && match.Groups.Count > 1)
+
 				cookie.Expires = DateTime.Parse(match.Groups[1].Value);
+
 
 			match = Regex.Match(data, @";\s*Domain=([^;]+)");
 			if (match != null && match.Groups.Count > 1)

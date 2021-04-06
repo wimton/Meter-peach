@@ -50,7 +50,9 @@ namespace Peach.Core.Runtime
 		{
 			var color = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Yellow;
+
 			Console.WriteLine(string.Format("\n -- Caught fault at iteration {0}, trying to reproduce --\n", currentIteration));
+
 			Console.ForegroundColor = color;
 			reproducing = true;
 		}
@@ -59,7 +61,9 @@ namespace Peach.Core.Runtime
 		{
 			var color = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Red;
+
 			Console.WriteLine(string.Format("\n -- Could not reproduce fault at iteration {0} --\n", currentIteration));
+
 			Console.ForegroundColor = color;
 			reproducing = false;
 		}
@@ -68,8 +72,10 @@ namespace Peach.Core.Runtime
 		{
 			var color = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Red;
+
 			Console.WriteLine(string.Format("\n -- {1} fault at iteration {0} --\n", currentIteration,
 				reproducing ? "Reproduced" : "Caught"));
+
 			Console.ForegroundColor = color;
 			reproducing = false;
 		}
@@ -131,7 +137,9 @@ namespace Peach.Core.Runtime
 					remain = TimeSpan.FromMilliseconds((total * elapsed / done) - elapsed);
 				}
 
+
 				strEta = remain.ToString("g");
+
 			}
 
 
@@ -139,7 +147,9 @@ namespace Peach.Core.Runtime
 			Console.ForegroundColor = ConsoleColor.DarkGray;
 			Console.Write("\n[");
 			Console.ForegroundColor = ConsoleColor.Gray;
+
 			Console.Write(string.Format("{0}{1},{2},{3}", controlIteration, currentIteration, strTotal, strEta));
+
 			Console.ForegroundColor = ConsoleColor.DarkGray;
 			Console.Write("] ");
 			Console.ForegroundColor = ConsoleColor.DarkGreen;

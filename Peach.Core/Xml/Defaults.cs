@@ -135,7 +135,9 @@ namespace Peach.Core.Xml
 
 			try
 			{
+
 				int.Parse(value);
+
 				return DataType.Integer;
 			}
 			catch
@@ -144,7 +146,9 @@ namespace Peach.Core.Xml
 
 			try
 			{
+
 				double.Parse(value);
+
 				return DataType.Double;
 			}
 			catch

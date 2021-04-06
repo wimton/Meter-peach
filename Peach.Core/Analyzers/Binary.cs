@@ -160,7 +160,9 @@ namespace Peach.Core.Analyzers
             if (logger.IsDebugEnabled)
             {
                 int count = block.EnumerateAllElements().Count();
+
                 logger.Debug("Created {0} data elements from binary data.", count);
+
             }
 
             parent.parent[parent.name] = block;

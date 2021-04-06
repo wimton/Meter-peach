@@ -1,0 +1,65 @@
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance  
+ xsi:schemaLocation="http://peachfuzzer.com/2012/Peach/peach/peach.xsd">
+<DataModel name="TheDataModel">
+	<String value="" mutable="false"/>
+    <!--<Analyzer class="StringToken"/>-->
+    <!--<String value=""/>-->
+</DataModel>
+
+<DataModel name="PacketContent">
+<Block name="Headerdata">
+	<Number name="Type" size="8" signed="false" />
+		<Number name="Length" size="8" signed="false" >
+
+	</Number>
+		<Number name="DstAddress" size="16" signed="false" endian="big">
+	</Number>
+		<Number name="SrcAddress" size="16" signed="false" endian="big">
+	</Number>
+		<Number name="Control" size="8" signed="false">
+		</Number>
+		</Block>
+		<Number name="HCS" size="16" signed="false" endian="big">
+						           <Fixup class="CrcFixup">
+				               <Param name="ref" value="HeaderData"/>
+				           </Fixup>
+						   <Blob name="Payload"/>
+	</Number>
+</DataModel>
+
+<DataModel name="SABM">
+	<String value="" mutable="false"/>
+    <!--<Analyzer class="StringToken"/>-->
+    <!--<String value=""/>-->
+</DataModel>
+
+
+
+	<StateModel name=""TheStateModel"" initialState=""InitialState"">
+		<State name=""InitialState"">
+			<Action name=""Send"" type=""output"">
+				<DataModel ref=""SABM""/>
+			</Action>
+
+			<Action name=""Recv"" type=""input"">
+				<DataModel ref=""ResponseModel""/>
+			</Action>
+
+
+		</State>
+	</StateModel>
+
+	<Test name=""Default"">
+		<StateModel ref=""TheStateModel""/>
+		<Publisher class=""SerialPort"">
+			<Param name=""PortName"" value=""COM6""/>
+		</Publisher>
+	</Test>
+
+		<!-- OPTIONAL: Configure a strategy -->
+		<!--<Strategy class="Sequential"/>-->
+		<Logger class="Filesystem">
+			<Param name="Path" value="logs"/>
+		</Logger>
+	</Test>
+</Peach>

@@ -60,12 +60,14 @@ namespace Peach.Core.Proxy.Web
 
 		public override string ToString()
 		{
+
 			return string.Format("HTTP/{0} {1} {2}\r\n{3}\r\n{4}",
 				Version,
 				Status,
 				Reason,
 				Headers.ToString(),
 				ASCIIEncoding.ASCII.GetString(Body));
+
 		}
 
 		public static HttpResponse Parse(MemoryStream stream)
@@ -115,7 +117,9 @@ namespace Peach.Core.Proxy.Web
 
 				if (res.Headers.ContainsKey("content-length"))
 				{
+
 					int len = int.Parse(res.Headers["content-length"].Value);
+
 					if ((dataBuffer.Length - dataBuffer.Position) < len)
 						return null;
 

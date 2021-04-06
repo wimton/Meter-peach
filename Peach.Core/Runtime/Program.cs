@@ -170,8 +170,12 @@ namespace Peach.Core.Runtime
 					{ "range=", v => ParseRange(config, v)},
 					{ "t|test", v => test = true},
 					{ "c|count", v => config.countOnly = true},
+
 					{ "skipto=", v => config.skipToIteration = Convert.ToUInt32(v)},
+
+
 					{ "seed=", v => config.randomSeed = Convert.ToUInt32(v)},
+
 					{ "p|parallel=", v => ParseParallel(config, v)},
 					{ "a|agent=", v => agent = v},
 					{ "D|define=", v => AddNewDefine(v) },
@@ -497,7 +501,9 @@ Debug Peach XML File
 
 			try
 			{
+
 				config.rangeStart = Convert.ToUInt32(parts[0]);
+
 			}
 			catch (Exception ex)
 			{
@@ -506,7 +512,9 @@ Debug Peach XML File
 
 			try
 			{
+
 				config.rangeStop = Convert.ToUInt32(parts[1]);
+
 			}
 			catch (Exception ex)
 			{
@@ -527,7 +535,9 @@ Debug Peach XML File
 
 			try
 			{
+
 				config.parallelTotal = Convert.ToUInt32(parts[0]);
+
 
 				if (config.parallelTotal == 0)
 					throw new ArgumentOutOfRangeException();
@@ -539,7 +549,9 @@ Debug Peach XML File
 
 			try
 			{
+
 				config.parallelNum = Convert.ToUInt32(parts[1]);
+
 				if (config.parallelNum == 0 || config.parallelNum > config.parallelTotal)
 					throw new ArgumentOutOfRangeException();
 			}

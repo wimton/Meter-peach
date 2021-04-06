@@ -783,7 +783,17 @@ for mutators.</xs:documentation>
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:string">
+                <xs:enumeration value="Asn1Length">
+                  <xs:annotation>
+                    <xs:documentation>DER encoded length</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
                 <xs:enumeration value="CiscoCdpChecksum" />
+                <xs:enumeration value="Cmac">
+                  <xs:annotation>
+                    <xs:documentation>RFC4493 Cmac checksum.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
                 <xs:enumeration value="CopyValue">
                   <xs:annotation>
                     <xs:documentation>Fixup used in testing.  Will copy another elements value into us.</xs:documentation>
@@ -807,6 +817,11 @@ for mutators.</xs:documentation>
                 <xs:enumeration value="FillValue">
                   <xs:annotation>
                     <xs:documentation>Will fill a BitStream with incrementing values from 'start' to 'stop'.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="Gmac">
+                  <xs:annotation>
+                    <xs:documentation>GMAC checksum.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="Hmac">
@@ -841,7 +856,7 @@ for mutators.</xs:documentation>
                 </xs:enumeration>
                 <xs:enumeration value="Sha224">
                   <xs:annotation>
-                    <xs:documentation>Standard SHA256 checksum.</xs:documentation>
+                    <xs:documentation>Standard SHA224 checksum.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="Sha256">
@@ -872,6 +887,11 @@ for mutators.</xs:documentation>
                 <xs:enumeration value="SequenceRandom">
                   <xs:annotation>
                     <xs:documentation>Standard sequential random fixup.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="Signature">
+                  <xs:annotation>
+                    <xs:documentation>ECDSA or RSA signature</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="TcpChecksum">
@@ -910,8 +930,7 @@ for mutators.</xs:documentation>
   </xs:element>
   <xs:element name="Hint">
     <xs:annotation>
-      <xs:documentation>Hints are attached to data elements providing information
-for mutators.</xs:documentation>
+      <xs:documentation>Hints are attached to data elements providing information for mutators.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="name" type="xs:string" use="required" />
@@ -960,9 +979,24 @@ for mutators.</xs:documentation>
                     <xs:documentation>Decompress on output using gzip.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
-                <xs:enumeration value="Aes128">
+                <xs:enumeration value="AesCbc">
                   <xs:annotation>
-                    <xs:documentation>Aes128 transform (hex &amp; binary).</xs:documentation>
+                    <xs:documentation>AES CBC transform (hex &amp; binary).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="AesEcb">
+                  <xs:annotation>
+                    <xs:documentation>AES ECB transform (hex &amp; binary).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="AesGcm">
+                  <xs:annotation>
+                    <xs:documentation>AES GCM transform (hex &amp; binary.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="AesKW">
+                  <xs:annotation>
+                    <xs:documentation>AES key wrap transform (hex &amp; binary.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="ApacheMd5Crypt">
@@ -978,6 +1012,41 @@ for mutators.</xs:documentation>
                 <xs:enumeration value="CvsScramble">
                   <xs:annotation>
                     <xs:documentation>CVS pserver password scramble.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeBitString">
+                  <xs:annotation>
+                    <xs:documentation>ASN.1 bit string (byte aligned).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeIA5String">
+                  <xs:annotation>
+                    <xs:documentation>ASN.1 IA5 text string.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeInteger">
+                  <xs:annotation>
+                    <xs:documentation>ASN.1 integer.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeOctetString">
+                  <xs:annotation>
+                    <xs:documentation>ASN.1 Octed string.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeOID">
+                  <xs:annotation>
+                    <xs:documentation>ASN.1 OID from dot separated numbers string</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="DerEncodeExplicit">
+                  <xs:annotation>
+                    <xs:documentation>Encode on output as explicitly tagged ASN.1</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="HdlcFrameEncode">
+                  <xs:annotation>
+                    <xs:documentation>Adds start and end flags and escapes</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="Hmac">
@@ -1000,7 +1069,7 @@ for mutators.</xs:documentation>
                     <xs:documentation>SHA-256 transform (hex &amp; binary).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
-                <xs:enumeration value="TripleDes">
+                <xs:enumeration value="TripleDesCbC">
                   <xs:annotation>
                     <xs:documentation>TripleDes transform (hex &amp; binary).</xs:documentation>
                   </xs:annotation>
@@ -1033,6 +1102,11 @@ for mutators.</xs:documentation>
                 <xs:enumeration value="HtmlEncode">
                   <xs:annotation>
                     <xs:documentation>Encode on output as HTML (encoding &lt; &gt; &amp; and ").</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="HuffmanTransformer">
+                  <xs:annotation>
+                    <xs:documentation>En/De-code on output with Huffman</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="Ipv4StringToOctet">
@@ -2281,8 +2355,7 @@ defaults for generation, etc.</xs:documentation>
       </xs:attribute>
       <xs:attribute default="0" name="waitTime" type="xs:decimal" use="optional">
         <xs:annotation>
-          <xs:documentation>Time to wait in seconds between each test case. Value can be fractional
-(0.25). Defaults to zero (0).</xs:documentation>
+          <xs:documentation>Time to wait in seconds between each test case. Value can be fractional (0.25). Defaults to zero (0).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute default="2" name="faultWaitTime" type="xs:decimal" use="optional">
@@ -2375,9 +2448,7 @@ be fractional (0.25). Defaults to two (2) seconds.</xs:documentation>
   </xs:complexType>
   <xs:complexType name="MutationStrategy">
     <xs:annotation>
-      <xs:documentation>Mutation strategies drive the fuzzing
-that Peach performs.  Creating a fuzzing
-strategy allows one to fully control which elements
+      <xs:documentation>Mutation strategies drive the fuzzing that Peach performs.  Creating a fuzzing strategy allows one to fully control which elements
 are mutated, by which mutators, and when.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
@@ -2627,6 +2698,7 @@ then calling an RPC method.</xs:documentation>
                 <xs:enumeration value="ConsoleHex" />
                 <xs:enumeration value="File" />
                 <xs:enumeration value="FilePerIteration" />
+                <xs:enumeration value="Hdlc" />
                 <xs:enumeration value="Http" />
                 <xs:enumeration value="Null" />
                 <xs:enumeration value="RawV4">

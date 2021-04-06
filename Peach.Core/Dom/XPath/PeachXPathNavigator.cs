@@ -519,9 +519,15 @@ namespace Peach.Core.Dom.XPath
 				{
 					switch (attr)
 					{
+
 						case "isMutable": return ((DataElement)currentNode).isMutable.ToString();
+
+
 						case "isToken": return ((DataElement)currentNode).isToken.ToString();
+
+
 						case "length": return ((DataElement)currentNode).length.ToString();
+
 					}
 				}
 				else if (currentNode is Action)

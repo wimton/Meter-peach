@@ -77,7 +77,9 @@ namespace Peach.Core.Dom
 					state["self"] = From;
 
 					object value = Scripting.EvalExpression(_expressionGet, state);
+
 					count = Convert.ToInt64(value);
+
 				}
 
 				return count;
@@ -108,8 +110,10 @@ namespace Peach.Core.Dom
 				if (OfArray == null)
 				{
 					logger.Error(
+
 						string.Format("Count Relation requires '{0}' to be an array.  Set the minOccurs and maxOccurs properties.",
 						OfName));
+
 
 					return null;
 				}
@@ -124,7 +128,9 @@ namespace Peach.Core.Dom
 					state["self"] = From;
 
 					object value = Scripting.EvalExpression(_expressionSet, state);
+
 					count = Convert.ToInt32(value);
+
 				}
 
 				return new Variant(count);
@@ -147,7 +153,9 @@ namespace Peach.Core.Dom
 				state["self"] = From;
 
 				object newValue = Scripting.EvalExpression(_expressionSet, state);
+
 				count = Convert.ToInt32(newValue);
+
 			}
 
 			From.DefaultValue = new Variant(count);

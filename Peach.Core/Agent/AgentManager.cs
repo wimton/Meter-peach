@@ -99,7 +99,9 @@ namespace Peach.Core.Agent
 
 		private void AgentConnect(string name)
 		{
+
 			logger.Trace("AgentConnect: {0}", name);
+
 
 			Dom.Agent def = _agentDefinitions[name];
 			AgentClient agent = _agents[name];
@@ -242,7 +244,9 @@ namespace Peach.Core.Agent
 				});
 			}
 
+
 			logger.Trace("DetectedFault: {0}", ret);
+
 			return ret;
 		}
 
@@ -275,7 +279,11 @@ namespace Peach.Core.Agent
 				});
 			}
 
+
+
 			logger.Trace("MustStop: {0}", ret.ToString());
+
+
 			return ret;
 		}
 

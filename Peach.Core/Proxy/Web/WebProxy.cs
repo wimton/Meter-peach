@@ -76,7 +76,9 @@ namespace Peach.Core.Proxy.Web
 				if (match != null && match.Groups.Count == 3)
 				{
 					host = match.Groups[1].Value;
+
 					port = int.Parse(match.Groups[2].Value);
+
 				}
 
 				logger.Info("Creating server connection to " + host + ":" + port);

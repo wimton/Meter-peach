@@ -86,10 +86,14 @@ namespace Peach.Core.Loggers
 
 		protected void SaveFault(Category category, Fault fault)
 		{
+
 			log.WriteLine("! Fault detected at iteration {0} : {1}", fault.iteration, DateTime.Now.ToString());
 
+
 			// root/category/bucket/iteration
+
 			var subDir = System.IO.Path.Combine(RootDir, category.ToString(), fault.folderName, fault.iteration.ToString());
+
 
 			var files = new List<string>();
 
@@ -130,7 +134,9 @@ namespace Peach.Core.Loggers
 				// Save reproFault collectedData in fault
 				foreach (var kv in reproFault.collectedData)
 				{
+
 					var key = System.IO.Path.Combine("Initial", reproFault.iteration.ToString(), kv.Key);
+
 					fault.collectedData.Add(new Fault.Data(key, kv.Value));
 				}
 
@@ -231,7 +237,9 @@ namespace Peach.Core.Loggers
 			else if (coreFault.majorHash == null && coreFault.minorHash == null && coreFault.exploitability == null)
 				ret.folderName = "Unknown";
 			else
+
 				ret.folderName = string.Format("{0}_{1}_{2}", coreFault.exploitability, coreFault.majorHash, coreFault.minorHash);
+
 
 			// Collect the data sets used by peach
 			var sb = new StringBuilder();
@@ -297,12 +305,16 @@ namespace Peach.Core.Loggers
 
 			if (totalIterations != null)
 			{
+
 				log.WriteLine(". Iteration {0} of {1} : {2}", currentIteration, (uint)totalIterations, DateTime.Now.ToString());
+
 				log.Flush();
 			}
 			else
 			{
+
 				log.WriteLine(". Iteration {0} : {1}", currentIteration, DateTime.Now.ToString());
+
 				log.Flush();
 			}
 		}
@@ -404,7 +416,9 @@ namespace Peach.Core.Loggers
 			log.WriteLine("Peach Fuzzing Run");
 			log.WriteLine("=================");
 			log.WriteLine("");
+
 			log.WriteLine("Date of run: " + context.config.runDateTime.ToString());
+
 			log.WriteLine("Peach Version: " + context.config.version);
 
 			log.WriteLine("Seed: " + context.config.randomSeed);

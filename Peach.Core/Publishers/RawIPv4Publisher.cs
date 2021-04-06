@@ -36,7 +36,7 @@ using System.Net.Sockets;
 using System.Net;
 using Peach.Core.Dom;
 using NLog;
-
+#pragma warning disable CA1305 // Specify IFormatProvider
 namespace Peach.Core.Publishers
 {
 	internal static class RawHelpers

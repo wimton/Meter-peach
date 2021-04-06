@@ -79,7 +79,9 @@ namespace Peach.Core.Transformers.Encode
 
             var ret = new BitStream();
             var writer = new BitWriter(ret);
+
             writer.WriteString(sret.ToString());
+
             ret.Seek(0, System.IO.SeekOrigin.Begin);
             return ret;
         }

@@ -139,7 +139,9 @@ namespace Peach.Core.Dom
 				long pos = sizedData.PositionBits;
 				if (pos == sizedData.LengthBits)
 				{
+
 					logger.Debug("Crack: Consumed all bytes. {0}", sizedData.Progress);
+
 					break;
 				}
 

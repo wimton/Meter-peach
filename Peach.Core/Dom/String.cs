@@ -355,8 +355,10 @@ namespace Peach.Core.Dom
 							grow -= nullLen;
 
 						if (grow < 0 || (grow % padLen) != 0)
+
 							throw new PeachException(string.Format("Error, can not satisfy length requirement of {1} {2} when padding {3} {0}.",
 								debugName, lengthType == LengthType.Bits ? len * 8 : len, lengthType.ToString().ToLower(), stringType));
+
 
 						final += MakePad(grow / padLen);
 					}
@@ -389,14 +391,18 @@ namespace Peach.Core.Dom
 		private bool NeedsExpand(int actual, long desired, bool nullTerm, string value)
 		{
 			if (actual > desired)
+
 				throw new PeachException(string.Format("Error, value of {3} string '{0}' is longer than the specified length of {1} {2}.",
 					name, lengthType == LengthType.Bits ? desired * 8 : desired, lengthType.ToString().ToLower(), stringType));
+
 
 			if (actual == desired)
 			{
 				if (nullTerm && !value.EndsWith("\0"))
+
 					throw new PeachException(string.Format("Error, adding null terminator to {3} string '{0}' makes it longer than the specified length of {1} {2}.",
 						name, lengthType == LengthType.Bits ? desired * 8 : desired, lengthType.ToString().ToLower(), stringType));
+
 
 				return false;
 			}
@@ -495,15 +501,19 @@ namespace Peach.Core.Dom
 			{
 				// Subtract one for the '-' sign
 				long fmtLen = 0 > num ? lenInChars - 1 : lenInChars;
+
 				ret = num.ToString("D" + fmtLen.ToString());
+
 			}
 
 			if (ret.Length == lenInChars)
 				return ret;
 
+
 			throw new SoftException(string.Format(
 				"Error, {0} numeric value '{1}' could not be converted to a {2}-{3} {4} string.",
 				debugName, value, _length, _lengthType.ToString().ToLower().TrimEnd('s'), _type));
+
 		}
 
 		protected override BitwiseStream InternalValueToBitStream()

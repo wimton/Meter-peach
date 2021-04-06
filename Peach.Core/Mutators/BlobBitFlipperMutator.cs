@@ -75,7 +75,9 @@ namespace Peach.Core.Mutators
                 {
                     try
                     {
+
                         n = Int32.Parse(h.Value);
+
                     }
                     catch (Exception ex)
                     {

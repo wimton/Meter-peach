@@ -415,7 +415,9 @@ namespace Peach.Core.Xml
 						Debugger.Break();
 
 					if (name == null)
+
 						name = c.ToString();
+
 					else
 						name += c;
 				}

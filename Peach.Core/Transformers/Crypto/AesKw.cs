@@ -81,7 +81,9 @@ namespace Peach.Core.Transformers.Crypto
                 for (long i = 0; i < n; i++)
                 {
                     long t = n * j + i + 1;  // add 1 because i is zero-based
+
                     logger.Debug(t.ToString());
+
                     logger.Debug("In   {0} {1} {2}", A, R[0], R[1]);
                     byte[] ct = new byte[16];
                     ict.TransformBlock(A.Concat(R[i]), 0, 16, ct, 0);
@@ -124,7 +126,9 @@ namespace Peach.Core.Transformers.Crypto
                 for (long i = n - 1; i >= 0; i--)
                 {
                     long t = n * j + i + 1;  // add 1 because i is zero-based
+
                     logger.Debug(t.ToString());
+
                     logger.Debug("In   {0} {1} {2}", A, R[0], R[1]);
                     A ^= t;
                     logger.Debug("XorT {0} {1} {2}", A, R[0], R[1]);

@@ -153,7 +153,9 @@ namespace Peach.Core.Analyzers
 				postString.stringType = encodingType;
 
 				preString.DefaultValue = new Variant(str.Substring(0, tokenIndex));
+
 				tokenString.DefaultValue = new Variant(token.ToString());
+
 				postString.DefaultValue = new Variant(str.Substring(tokenIndex + 1));
 
 				var block = new Dom.Block(el.name);

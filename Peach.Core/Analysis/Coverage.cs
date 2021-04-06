@@ -189,7 +189,9 @@ namespace Peach.Core.Analysis
 
 			var libs = "";
 			if (psi.EnvironmentVariables.ContainsKey("LD_LIBRARY_PATH"))
+
 				libs = psi.EnvironmentVariables["LD_LIBRARY_PATH"].ToString();
+
 
 			psi.EnvironmentVariables["LD_LIBRARY_PATH"] = elf_libs + cpp_libs + libs;
 			psi.EnvironmentVariables["PIN_VM_LD_LIBRARY_PATH"] = elf_libs + cpp_libs + glibc_libs + libs;
@@ -248,7 +250,9 @@ namespace Peach.Core.Analysis
 			foreach (DictionaryEntry de in StartInfo.EnvironmentVariables)
 				psi.EnvironmentVariables[de.Key.ToString()] = de.Value.ToString();
 
+
 			logger.Debug("Using sample {0}", sampleFile);
+
 			logger.Debug("{0} {1}", psi.FileName, psi.Arguments);
 
 			try

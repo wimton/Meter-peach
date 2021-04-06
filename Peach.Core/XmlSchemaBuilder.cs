@@ -462,7 +462,9 @@ namespace Peach.Core.Xsd
 			var parameters = mi.GetParameters().Select(p => p.ParameterType.FullName);
 			var args = string.Join(",", parameters);
 			if (!string.IsNullOrEmpty(args))
+
 				args = string.Format("({0})", args);
+
 
 			return Select(type, "M", mi.Name, args);
 		}
@@ -474,7 +476,9 @@ namespace Peach.Core.Xsd
 				return null;
 
 			var name = string.IsNullOrEmpty(suffix) ? type.FullName : string.Join(".", type.FullName, suffix);
+
 			var query = string.Format("/doc/members/member[@name='{0}:{1}{2}']/summary", prefix, name, args);
+
 
 			var navi = doc.CreateNavigator();
 			var iter = navi.Select(query);

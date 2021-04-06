@@ -1,0 +1,13 @@
+Peach Fuzzing Run
+=================
+
+Date of run: 17.01.2020 13:28:52
+Peach Version: 0.0.0.0
+Seed: 52297
+Command line: --debug HDLC.xml 
+Pit File: HDLC.xml
+. Test starting: Default
+
+. Iteration 1 : 17.01.2020 13:28:53
+. Iteration 1 of 4294967295 : 17.01.2020 13:28:53
+. Test finished: Default

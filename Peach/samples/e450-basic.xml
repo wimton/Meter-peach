@@ -1,0 +1,54 @@
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- 7E A01E 0321 93 CD3B 8180120501F80601F8070400000001080400000001 55B6 7E SABM from MAP-->
+<!-- 7E A020 2103 73 7398 81801405020080060200F8070400000001080400000001 87CB 7E UA from E450 S4 -->
+
+	<DataModel name="Payload">
+	<Blob name="Options" value="8180120501F80601F8070400000001080400000001" valueType="hex" />
+	</DataModel>
+ 
+	<DataModel name="Packet">
+	<Block name="Frame">
+		<Block name="Header">
+		  <Number name="Type" size="8" signed="false" value="A0" valueType="hex"/>
+		  <Number name="Length" size="8" signed="false" >
+			<Relation type="size" lengthType="bytes" of="Frame" expressionGet="size-2" expressionSet="size+2"  />
+		  </Number>
+		  <Number name="ToAddr" size="8" signed="false" value="03" valueType="hex"/>
+		  <Number name="FromAddr" size="8" signed="false" value="21" valueType="hex"/>
+		<Number name="Ctl" size="8" signed="false" value="93" valueType="hex"/>
+			</Block>
+			<Number name="HCS" size="16" signed="false">
+				<Fixup class="CrcFixup">
+					<Param name="ref" value="Header"/>
+					<Param name="type" value="CRC_DLMS"/>
+				</Fixup>
+		</Number>
+		<Blob name="Options" value="8180120501F80601F8070400000001080400000001" valueType="hex" />
+	</Block>
+		<Number name="FCS" size="16" signed="false">
+				<Fixup class="CrcFixup">
+					<Param name="ref" value="Frame"/>
+					<Param name="type" value="CRC_DLMS"/>
+				</Fixup>
+		</Number>
+	</DataModel>
+
+	<StateModel name="TheStateModel" initialState="InitialState">
+		<State name="InitialState">
+			<Action name="Send" type="output">
+				<DataModel ref="Packet"/>
+			</Action>
+		</State>
+	</StateModel>
+
+	<Test name="Default">
+		<StateModel ref="TheStateModel"/>
+		<Publisher class="File">
+			<Param name="FileName" value="fuzzfile.bin"/>
+		</Publisher>
+		<Logger class="Filesystem">
+			<Param name="Path" value="logs"/>
+		</Logger>   
+	</Test>
+</Peach>

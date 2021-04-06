@@ -76,7 +76,9 @@ namespace Peach.Core.Agent.Monitors
 			Tuple<IPEndPoint, byte[]> data = ReadSocket();
 			if (data != null)
 			{
+
 				_fault.description = string.Format("Received {0} bytes from '{1}'.", data.Item2.Length, data.Item1);
+
 				_fault.type = FaultOnSuccess ? FaultType.Data : FaultType.Fault;
 				_fault.collectedData.Add(new Fault.Data("Response", data.Item2));
 			}

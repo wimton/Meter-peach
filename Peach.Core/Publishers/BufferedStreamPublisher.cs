@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Peach.Core.IO;
-
+#pragma warning disable CA1305 // Specify IFormatProvider
 namespace Peach.Core.Publishers
 {
 	/// <summary>
@@ -12,12 +12,13 @@ namespace Peach.Core.Publishers
 	/// has a non-seekable stream interface.
 	/// 
 	/// Most derived classes should only need to override OnOpen()
-	/// and in the implementation open _client and call StartClià_£ent()
+	/// and in the implementation open _client and call StartClient()
 	/// to begin async reads from _client to _buffer.
 	/// </summary>
 	public abstract class BufferedStreamPublisher : Publisher
 	{
-		public int SendTimeout { get; set; }
+
+        public int SendTimeout { get; set; }
 		public int Timeout { get; set; }
 
 		protected int _sendLen = 0;
@@ -75,7 +76,6 @@ namespace Peach.Core.Publishers
 					else
 					{
 						Logger.Debug("Read {0} bytes from {1}", len, _clientName);
-
 						lock (_bufferLock)
 						{
 							long pos = _buffer.Position;
@@ -158,16 +158,31 @@ namespace Peach.Core.Publishers
 			data.CopyTo(_client);
 		}
 
-		protected virtual void ClientShutdown()
-		{
-			_client.Close();
-		}
+        protected virtual void ClientShutdown()
+        {
+            if (_client != null)
+            try
+            {
+                _client.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Debug("Exception {1} Shutting down {0}", _clientName, e.Message);
+            }
+        }
 
 		protected virtual void ClientClose()
-		{
-			_client.Close();
-		}
-
+        {
+            if (_client != null)
+                try
+            {
+                _client.Close();
+            }
+            catch (Exception e)
+            {
+                Logger.Debug("Exception {1} Closing {0}", _clientName, e.Message);
+            }
+        }
 		#endregion
 
 		#region Publisher Overrides
@@ -200,7 +215,6 @@ namespace Peach.Core.Publishers
 				if (_client != null)
 				{
 					Logger.Debug("Shutting down connection to {0}", _clientName);
-
 					try
 					{
 						ClientShutdown();
@@ -284,7 +298,6 @@ namespace Peach.Core.Publishers
 							if (length == 0)
 								return;
 						}
-
 						ar = ClientBeginWrite(_sendBuf, offset, length - offset, null, null);
 					}
 
@@ -332,7 +345,6 @@ namespace Peach.Core.Publishers
 						return;
 					}
 				}
-
 				Thread.Sleep(100);
 			}
 		}

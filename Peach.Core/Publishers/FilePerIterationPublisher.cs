@@ -34,7 +34,9 @@ namespace Peach.Core.Publishers
 
 		protected void setFileName(uint iteration)
 		{
+
 			FileName = string.Format(fileTemplate, iteration);
+
 
 			if (IsControlIteration)
 				FileName += ".Control";

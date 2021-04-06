@@ -11,20 +11,32 @@ namespace Peach.Core.Transformers.asn1
     [Description("Encode on output as ASN.1 printable string.")]
     [Transformer("DerEncodePrintableString", true)]
     [Transformer("asn1. DerEncodePrintableString")]
+    [Parameter("tagClass", typeof(Asn1Codec.tagClass), "class [ Universal, Application, Context, Private]", "Universal")]
     [Serializable]
     public class DerEncodePrintableString : Transformer
     {
-        private Codec codec = new Codec();
-
+        private Asn1Codec codec = new Asn1Codec();
+        public Asn1Codec.tagClass tagClass { get; protected set; }
         public DerEncodePrintableString(Dictionary<string, Variant> args) : base(args)
         {
         }
 
         protected override BitwiseStream internalEncode(BitwiseStream data)
         {
+            var ret = new BitStream();
+            try
             {
-                string input = new BitReader(data).ReadString();
-// attempted cleanup
+                BitReader br = new BitReader(data);
+                string input = br.ReadString();
+                int len = (int)input.Length;
+                br.Dispose();
+                ret.WriteByte(0x13);
+                if (len == 0)
+                {
+                    ret.WriteByte((byte)0x00);
+                    return ret;
+                }
+                // attempted cleanup
                 input = input.Replace('_', '-');
                 input = input.Replace('!', '.');
                 input = input.Replace('"', '\'');
@@ -38,10 +50,6 @@ namespace Peach.Core.Transformers.asn1
                 input = input.Replace('&', '.');
                 input = input.Replace('*', '.');
                 input = input.Replace('@', 'a');
-
-                int len = (int)input.Length;
-                var ret = new BitStream();
-                ret.WriteByte(0x13);
                 if (len > 127) // TODO: > 32000 long
                 {
                     if (len > 255)
@@ -57,7 +65,6 @@ namespace Peach.Core.Transformers.asn1
                             ret.WriteByte((byte)((len >> 16) & 0xFF));
                             ret.WriteByte((byte)((len >> 8) & 0xFF));
                         }
-
                     }
                 }
                 ret.WriteByte((byte)(len & 0xFF));
@@ -65,13 +72,18 @@ namespace Peach.Core.Transformers.asn1
                 {
                     ret.WriteByte((byte)input[i]);
                 }
-                return ret;
             }
+            catch (Exception e)
+            {
+                ret.WriteByte((byte)0x05);
+                ret.WriteByte((byte)0x00);
+            }
+            return ret;
         }
 
         protected override BitStream internalDecode(BitStream data)
         {
-            return codec.internalDecode(data, 0x13);
+            return codec.InternalDecode(data, 0x13, tagClass);
         }
     }
 }

@@ -140,7 +140,9 @@ namespace Peach.Core.Dom
 
 			for (int i = 1; ContainsKey(ret); ++i)
 			{
+
 				ret = string.Format("{0}_{1}", name, i);
+
 			}
 
 			return ret;

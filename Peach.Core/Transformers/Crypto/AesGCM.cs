@@ -16,6 +16,7 @@ namespace Peach.Core.Transformers.Crypto
     [Parameter("IV", typeof(HexString), "Initialization Vector")]
     [Parameter("AAD", typeof(HexString), "Additional Authenticated Data","")]
     [Parameter("Length", typeof(int), "Tag length in bytes (Value of 0 means don't truncate)", "0")]
+    [Parameter("Policy", typeof(int), "DLMS policy, ", "-1")]
     [Serializable]
 
     public class AesGcm : SymmetricAlgorithmTransformer
@@ -25,12 +26,14 @@ namespace Peach.Core.Transformers.Crypto
         public int Length { get; protected set; }
         protected DataElement _ref { get; set; }
         protected HexString AAD { get; set; }
+        public int Policy { get; protected set; }
 
         private byte[] counter = new byte[16];
+        private byte[] J0 = new byte[16];
         private byte[] H = new byte[16];
+        private byte[] Y = new byte[16];
         private byte[] last = new byte[16];
-
-
+ 
         private Rijndael aes;
         private ICryptoTransform ict;
 
@@ -38,7 +41,7 @@ namespace Peach.Core.Transformers.Crypto
         private static readonly byte[] poly = { 0x00, 0xE1 };
 
         /* right shift */
-        private static void _gcm_rightshift(byte[] a)
+        private void _gcm_rightshift(byte[] a)
         {
             int x;
             for (x = 15; x > 0; x--)
@@ -48,22 +51,20 @@ namespace Peach.Core.Transformers.Crypto
             a[0] >>= 1;
         }
 
-        /* c = b*a */
-
-        /**
-          GCM GF multiplier (internal use only)  bitserial
-          @param a   First value
-          @param b   Second value
-         */
-        public static byte [] gcm_gf_mult(byte[] a, byte[] b)
+        private void gcm_gf_mult(byte[] b)
         {
             byte[] Z = new byte[16];
             byte[] V = new byte[16];
             byte x, y, z;
-            System.Array.Copy(a, 0, V, 0, 16);
+            for (x = 0; x < 16; x++)
+            {
+                b[x] ^= Y[x];
+                V[x] = H[x];
+            }
+
             for (x = 0; x < 128; x++)
             {
-                if ((b[x >> 3] & mask[x & 7]) != 0)
+                if ((b[x >> 3] & mask[x & 7]) != 0) // Xi = 1
                 {
                     for (y = 0; y < 16; y++)
                     {
@@ -74,44 +75,117 @@ namespace Peach.Core.Transformers.Crypto
                 _gcm_rightshift(V);
                 V[0] ^= poly[z];
             }
-            return Z;
+            Y = Z;
         }
-        // multiply H with I
-        void gcm_mult_h(byte [] I)
+        private void gcm_gf_mult2(byte[] p)
         {
-            H = gcm_gf_mult(I, H);
+            byte[] Z = new byte[16];
+            byte[] V = new byte[16];
+            byte[] b = new byte[16];
+            for (int i = 0; i < 16; i++)
+            {
+                b[i] = (byte)(p[i] ^ Y[i]);
+                V[i] = H[i];
+            }
+           
+            for (int i = 0; i < 128; i++)
+            {
+                if ((b[i >> 3] & mask[i & 7]) != 0) // Xi = 1
+                {
+                    for (int j = 0; j < 16; j++)
+                    {
+                        Z[j] ^= V[j];
+                    }
+                }
+                _gcm_rightshift(V);
+                V[0] ^= poly[V[15] & 0x01];
+            }
+            Y=Z;
         }
+
         public AesGcm(Dictionary<string, Variant> args)
             : base(args)
         {
             byte[] aad = new byte[16];
+            Y.Initialize();
             ParameterParser.Parse(this, args);
-            if (Length == 0) Length = 12; // default 96 bit MAC 
+            if (Length > 16)
+                throw new PeachException("The truncate length is greater than the block size for the specified algorithm.");
+            if (Length < 0)
+                throw new PeachException("The truncate length must be greater than or equal to 0.");
+            if (Policy != -1)
+            {
+                if ((Length != 0) && (Length != 12))
+
+                    Logger.Warn("DLMS mode: Tag is {0} bytes long", Length);
+
+                else
+                {
+                    Length = 12;
+                    if ((Policy == 2) || (Policy == 0)) // No tag
+                        Length = 0;
+                }
+            }
+            else
+            {
+                if (Length == 0) Length = 16;
+            }
             aes = Rijndael.Create();
             aes.Mode = CipherMode.ECB;
             aes.Padding = PaddingMode.None;
             aes.Key = Key.Value;
-            counter.Initialize();
-            for (int i = 0; i < 12; i++) // fixed value
-                counter[i] = IV.Value[i]; // throw exception on too short IV
-            for (int i = 12; i < 16; i++) //block counter
-                counter[i] = 0;
-            counter[15] = 1;
-            ict = aes.CreateEncryptor();
+             ict = aes.CreateEncryptor();
             // initialize H with encrypted all 0
             H.Initialize();
             ict.TransformBlock(H, 0, 16, H, 0);
+            if (IV.Value.Length == 12)
+            {
+                counter.Initialize();
+                for (int i = 0; i < 12; i++) 
+                    counter[i] = IV.Value[i]; 
+                counter[15] = 1; 
+            }
+            else
+            {
+                byte[] tmp = new byte[16];
+                if (Policy != -1)
+
+                    Logger.Warn("DLMS mode: IV is {0} bytes long", IV.Value.Length);
+
+                for (int i = 0; (i < IV.Value.Length); i++) 
+                {
+                    tmp[i % 16] = IV.Value[i];
+                    if (((i > 0) && ((i+1) % 16 == 0))|| (i == IV.Value.Length))
+                    {
+                        gcm_gf_mult(tmp);
+                        tmp.Initialize(); // padding
+                    }
+                }
+                tmp.Initialize(); // append length block
+                tmp[15] = (byte)((8 * IV.Value.Length) % 256);
+                tmp[14] = (byte)((8 * IV.Value.Length) / 256);
+                gcm_gf_mult(tmp);
+                for (int i = 0; i < 16; i++)
+                {
+                    counter[i] = Y[i]; // J0
+                }
+                Y.Initialize();
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                J0[i] = counter[i]; // J0
+            }
             if (AAD != null)
             {
-                // set length in bits, multiple of 8, therefore, last[8] = 0
-                last[9] = (byte)(AAD.Value.Length % 256);
-                last[10] = (byte)((AAD.Value.Length / 256) % 256);
+                // set length in bits
+                last[7] = (byte)(8*AAD.Value.Length % 256);
+                last[6] = (byte)((8*AAD.Value.Length / 256) % 256);
                 for (int i = 0; i < AAD.Value.Length; i++)
                 {
                     aad[i % 16] = AAD.Value[i];
-                    if (((i > 0) && ((i % 16) == 0)) || (i == AAD.Value.Length))
+                    if (((i > 0) && (((i+1) % 16) == 0)) || (i == AAD.Value.Length))
                     {
-                        H = AesGcm.gcm_gf_mult(H, aad);
+                        gcm_gf_mult(aad);
                         aad.Initialize();
                     }
                 }
@@ -129,21 +203,20 @@ namespace Peach.Core.Transformers.Crypto
         protected override BitwiseStream internalEncode(BitwiseStream data)
         {
             int li = (int)data.Length;
+            Y.Initialize();
             var ret = new BitStream();
-            byte[] key = new byte[16];
+            byte[] ks = new byte[16];
             if (li > 0) // data may be absent, just calculate the tag over the AAD.
             {
                 BitReader r = new BitReader(data);
                 byte[] plain = r.ReadBytes(li);
                 byte[] buf = new byte[16];
-                last[1] = (byte)(li % 256);
-                last[2] = (byte)((li / 256) % 256);
+                last[15] = (byte)((8*li) % 256);
+                last[14] = (byte)(((8*li) / 256) % 256);
                 for (int i = 0; i < li; i++)
                 {
                     if (i % 16 == 0)
                     {
-                        buf.Initialize(); // ensure 0 padding
-                        ict.TransformBlock(counter, 0, 16, key, 0);
                         counter[15]++;
                         if (counter[15] == 0)
                         {
@@ -151,29 +224,34 @@ namespace Peach.Core.Transformers.Crypto
                             if (counter[14] == 0)
                                 counter[13]++;
                         }
+                        buf.Initialize(); // ensure 0 padding
+                        ict.TransformBlock(counter, 0, 16, ks, 0);
                     }
-                    buf[i % 16] = (byte)(plain[i] ^ key[i % 16]);
-                    ret.WriteByte(buf[i % 16]); // write encrypted byte
-                    if (((i > 0) && ((i % 16) == 0)) || (i == li)) // add every block to the ghash, and the last possibly incomplete block
+                    buf[i % 16] = (byte)(plain[i] ^ ks[i % 16]);
+                    if (Policy == 1)
+                        ret.WriteByte(plain[i]); // weird DLMS mode
+                    else
+                        ret.WriteByte(buf[i % 16]); // write encrypted byte
+                    if (( ((i+1) % 16) == 0) || (i == li)) // add every block to the ghash, and the last possibly incomplete block
                     {
-                        H = AesGcm.gcm_gf_mult(H, buf);
+                        gcm_gf_mult(buf);
                     }
                 }
                 r.Dispose();
             }
-            H = AesGcm.gcm_gf_mult(H, last); // add length block
-            counter[15] = 0; counter[14]=0;counter[13]=0; //  counter = 0
-            ict.TransformBlock(counter, 0, 16, key, 0); // encrypt tag
+            gcm_gf_mult(last); // add length block
+            ict.TransformBlock(J0, 0, 16, ks, 0); // encrypt tag
             for (int i = 0; i < Length; i++)
-                ret.WriteByte((byte)(H[i] ^ key[i]));
+                ret.WriteByte((byte)(Y[i] ^ ks[i]));
             return ret;
         }
 
         protected override BitStream internalDecode(BitStream data)
         {
             int li = (int)data.Length - Length; // cut off the tag
+            Y.Initialize();
             var ret = new BitStream();
-            byte[] key = new byte[16];
+            byte[] ks = new byte[16];
             byte[] buf = new byte[16];
             BitReader r = new BitReader(data);
             if (li > 0)
@@ -185,8 +263,6 @@ namespace Peach.Core.Transformers.Crypto
                 {
                     if (i % 16 == 0)
                     {
-                        buf.Initialize(); // ensure 0 padding
-                        ict.TransformBlock(counter, 0, 16, key, 0);
                         counter[15]++;
                         if (counter[15] == 0)
                         {
@@ -194,24 +270,39 @@ namespace Peach.Core.Transformers.Crypto
                             if (counter[14] == 0)
                                 counter[13]++;
                         }
+                        buf.Initialize(); // ensure 0 padding
+                        ict.TransformBlock(counter, 0, 16, ks, 0);
                     }
-                    buf[i % 16] = (byte)(crypto[i] ^ key[i % 16]);
-                    ret.WriteByte(buf[i % 16]); // write decrypted byte
-                    if (((i > 0) && ((i % 16) == 0)) || (i == li)) // add every block to the ghash, and the last possibly incomplete block
+                    if (Policy != 1)
                     {
-                        H = AesGcm.gcm_gf_mult(H, buf);
+                        buf[i % 16] = crypto[i];
+                        if (((i > 0) && ((i % 16) == 0)) || (i == li)) // add every block to the ghash, and the last possibly incomplete block
+                        {
+                            gcm_gf_mult(buf);
+                        }
+                        buf[i % 16] ^= ks[i % 16];
+                        ret.WriteByte(buf[i % 16]); // write decrypted byte
                     }
+                    else
+                    {
+                        ret.WriteByte(buf[i % 16]); // write trough
+                        buf[i % 16] ^= ks[i % 16]; // encrypt
+                        if (((i > 0) && ((i % 16) == 0)) || (i == li)) // add encrypted block to the ghash, and the last possibly incomplete block
+                        {
+                            gcm_gf_mult(buf);
+                        }
+                    }
+
                 }
             }
-            H = AesGcm.gcm_gf_mult(H, last); // add length block
-            counter[15] = 0; counter[14] = 0; counter[13] = 0; //  counter = 0
-            ict.TransformBlock(counter, 0, 16, key, 0); // encrypt tag
+            gcm_gf_mult(last); // add length block
+            ict.TransformBlock(J0, 0, 16, ks, 0); // decrypt tag
             buf = r.ReadBytes(Length);
             for (int i = 0; i < Length; i++)
             {
-                if (buf[i] != (byte)(H[i] ^ key[i]))
+                if (buf[i] != (byte)(Y[i] ^ ks[i]))
                 {
-                    Logger.Warn("MAC error");
+                    Logger.Warn("MAC error: ist {0} soll {1}", buf[i], (byte)(Y[i] ^ ks[i]));
                     break;
                 }
             }

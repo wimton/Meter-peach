@@ -170,7 +170,9 @@ namespace Peach.Core.Mutators
                 {
                     try
                     {
+
                         n = Int32.Parse(h.Value);
+
                     }
                     catch (Exception ex)
                     {
@@ -224,7 +226,9 @@ namespace Peach.Core.Mutators
         public override void sequentialMutation(DataElement obj)
         {
             if (obj is Dom.String)
+
                 obj.MutatedValue = new Variant(values[size][currentCount].ToString());
+
             else if (isULong)
                 obj.MutatedValue = new Variant(ulongValues[currentCount]);
             else
@@ -238,7 +242,9 @@ namespace Peach.Core.Mutators
         public override void randomMutation(DataElement obj)
         {
             if (obj is Dom.String)
+
                 obj.MutatedValue = new Variant(context.Random.Choice(values[size]).ToString());
+
             else if (isULong)
                 obj.MutatedValue = new Variant(context.Random.Choice(ulongValues));
             else

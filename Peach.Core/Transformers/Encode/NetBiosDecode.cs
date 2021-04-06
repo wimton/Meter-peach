@@ -67,11 +67,11 @@ namespace Peach.Core.Transformers.Encode
 
                 sb.Append((Char)(part1 + part2));
             }
-
             var ret = new BitStream();
             var writer = new BitWriter(ret);
             writer.WriteString(sb.ToString());
             ret.Seek(0, System.IO.SeekOrigin.Begin);
+            writer.Dispose();
             return ret;
         }
 
@@ -106,8 +106,11 @@ namespace Peach.Core.Transformers.Encode
 
             var ret = new BitStream();
             var writer = new BitWriter(ret);
+
             writer.WriteString(sret.ToString());
+
             ret.Seek(0, System.IO.SeekOrigin.Begin);
+            writer.Dispose();
             return ret;
         }
     }

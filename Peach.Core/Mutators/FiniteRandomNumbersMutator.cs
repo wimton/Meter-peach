@@ -83,7 +83,9 @@ namespace Peach.Core.Mutators
                 {
                     try
                     {
+
                         n = Int32.Parse(h.Value);
+
                     }
                     catch (Exception ex)
                     {
@@ -149,7 +151,9 @@ namespace Peach.Core.Mutators
             if (obj is Dom.String)
             {
                 UInt32 value = context.Random.NextUInt32();
+
                 obj.MutatedValue = new Variant(value.ToString());
+
                 obj.mutationFlags = MutateOverride.Default;
                 return;
             }

@@ -105,7 +105,9 @@ namespace Peach.Core.Agent.Monitors
 
 				fault.type = MemoryLimit > 0 && MemoryLimit <= pi.WorkingSet64 ? FaultType.Fault : FaultType.Data;
 				fault.description = sb.ToString();
+
 				fault.title = string.Format("{0} (pid: {1}) memory usage", pi.ProcessName, pi.Id);
+
 			}
 
 			return false;

@@ -122,7 +122,9 @@ namespace Peach.Core
 			}
 			catch (Exception ex)
 			{
+
 				throw new PeachException(string.Format("Error, could not load platform assembly '{0}'.  {1}", osAssembly, ex.Message), ex);
+
 			}
 		}
 

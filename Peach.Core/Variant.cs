@@ -108,10 +108,14 @@ namespace Peach.Core
 			switch (type.ToLower())
 			{
 				case "system.int32":
+
 					SetValue(Int32.Parse(v));
+
 					break;
 				case "system.double":
+
 					SetValue(Double.Parse(v));
+
 					break;
 				case "system.string":
 					SetValue(v);
@@ -241,7 +245,9 @@ namespace Peach.Core
 						if (v._valueString == string.Empty)
 							return 0;
 
+
 						return Convert.ToInt32(v._valueString);
+
 					case VariantType.ByteString:
 						throw new NotSupportedException("Unable to convert byte[] to int type.");
 					case VariantType.BitStream:
@@ -289,7 +295,9 @@ namespace Peach.Core
 						if (v._valueString == string.Empty)
 							return 0;
 
+
 						return Convert.ToUInt32(v._valueString);
+
 					case VariantType.ByteString:
 						throw new NotSupportedException("Unable to convert byte[] to int type.");
 					case VariantType.BitStream:
@@ -339,7 +347,9 @@ namespace Peach.Core
 						if (v._valueString == string.Empty)
 							return 0;
 
+
 						return Convert.ToInt64(v._valueString);
+
 					case VariantType.ByteString:
 						throw new NotSupportedException("Unable to convert byte[] to int type.");
 					case VariantType.BitStream:
@@ -374,7 +384,9 @@ namespace Peach.Core
 						if (v._valueString == string.Empty)
 							return 0;
 
+
 						return Convert.ToUInt64(v._valueString);
+
 					case VariantType.ByteString:
 						throw new NotSupportedException("Unable to convert byte[] to int type.");
 					case VariantType.BitStream:
@@ -416,7 +428,9 @@ namespace Peach.Core
 						if (v._valueString == string.Empty)
 							return 0.0;
 
+
 						return Convert.ToDouble(v._valueString);
+
 					case VariantType.ByteString:
 						throw new NotSupportedException("Unable to convert byte[] to int type.");
 					case VariantType.BitStream:
@@ -439,17 +453,27 @@ namespace Peach.Core
 			switch (v._type)
 			{
 				case VariantType.Int:
+
 					return Convert.ToString(v._valueInt);
+
 				case VariantType.Long:
+
 					return Convert.ToString(v._valueLong);
+
 				case VariantType.ULong:
+
 					return Convert.ToString(v._valueULong);
+
 				case VariantType.Double:
+
 					return Convert.ToString(v._valueDouble);
+
 				case VariantType.String:
 					return v._valueString;
 				case VariantType.Boolean:
+
 					return Convert.ToString(v._valueBool);
+
 				case VariantType.ByteString:
 					throw new NotSupportedException("Unable to convert byte[] to string type.");
 				case VariantType.BitStream:
@@ -694,7 +718,9 @@ namespace Peach.Core
 					return this._valueDouble.ToString();
 				case VariantType.String:
 					if (this._valueString.Length <= 80)
+
 						return this._valueString.ToString();
+
 					return _valueString.Substring(0, 64) + ".. (Len: " + _valueString.Length + " chars)";
 				case VariantType.ByteString:
 					return BytesToString(_valueByteArray);

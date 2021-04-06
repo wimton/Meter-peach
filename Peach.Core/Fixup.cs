@@ -81,9 +81,11 @@ namespace Peach.Core
 
 			if (!refs.SequenceEqual(refs.Intersect(args.Keys)))
 			{
+
 				string msg = string.Format("Error, {0} requires a '{1}' argument!",
 					this.GetType().Name,
 					string.Join("' AND '", refs));
+
 
 				throw new PeachException(msg);
 			}
@@ -104,7 +106,9 @@ namespace Peach.Core
 
 				elem = parent.find(refValue);
 				if (elem == null)
+
 					throw new PeachException(string.Format("{0} could not find ref element '{1}'", this.GetType().Name, refValue));
+
 
 				elem.Invalidated += new InvalidatedEventHandler(OnInvalidated);
 				elements[refKey] = elem;
@@ -144,7 +148,9 @@ namespace Peach.Core
 				{
 					var elem = obj.find(kv.Value);
 					if (elem == null)
+
 						throw new PeachException(string.Format("{0} could not find ref element '{1}'", this.GetType().Name, kv.Value));
+
 
 					elem.Invalidated += new InvalidatedEventHandler(OnInvalidated);
 					elements.Add(kv.Key, elem);

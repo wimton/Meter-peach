@@ -77,7 +77,7 @@ namespace Peach.Core.Test.Transformers
 			var expected = Encoding.ASCII.GetBytes("7f000001"); // 127.0.0.1
 			Assert.AreEqual(expected, actual);
 
-			var data = Bits.Fmt("{0}", Encoding.ASCII.GetBytes("0a01ff02")); //10.1.55.2
+			var data = Bits.Fmt("{0}", Encoding.ASCII.GetBytes("0a01ff02")); //10.1.255.2
 
 			DataCracker cracker = new DataCracker();
 			cracker.CrackData(dom.dataModels[0], data);

@@ -39,8 +39,10 @@ namespace Peach.Core.Fixups
 				state["fixupSelf"] = this;
 
 				_pythonFixup = Scripting.EvalExpression(
+
 					string.Format("{0}(fixupSelf)",
 					(string)args["class"]),
+
 					state);
 
 				if (_pythonFixup == null)
@@ -64,14 +66,18 @@ namespace Peach.Core.Fixups
 				state["fixupSelf"] = this;
 
 				_pythonFixup = Scripting.EvalExpression(
+
 					string.Format("{0}(fixupSelf)",
 					(string)args["class"]),
+
 					state);
 			}
 
 			var from = elements["ref"];
 
+
 			logger.Debug("fixupImpl(): ref: " + from.GetHashCode().ToString());
+
 
 			object data = _pythonFixup.fixup(from);
 

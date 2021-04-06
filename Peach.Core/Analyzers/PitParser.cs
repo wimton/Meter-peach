@@ -545,7 +545,9 @@ namespace Peach.Core.Analyzers
 			for (int i = 0; i < indent; i++)
 				sIndent += "  ";
 
+
 			Console.WriteLine(sIndent + string.Format("{0}: {1}", elem.GetHashCode(), elem.name));
+
 
 			var cont = elem as DataElementContainer;
 
@@ -1156,7 +1158,9 @@ namespace Peach.Core.Analyzers
 
 		private static string getDefaultError(Type type, string key)
 		{
+
 			return string.Format("Error, element '{0}' has an invalid default value for attribute '{1}'.", type.Name, key);
+
 		}
 
 		public string getDefaultAttr(Type type, string key, string defaultValue)
@@ -1296,7 +1300,9 @@ namespace Peach.Core.Analyzers
 
 			var type = ClassLoader.FindTypeByAttribute<A>((x, y) => y.Name == cls);
 			if (type == null)
+
 				throw new PeachException(string.Format("Error, unable to locate {0} named '{1}', FindTypeByAttribute returned null.", pluginType, cls));
+
 
 			validateParameterAttributes<A>(type, pluginType, cls, arg);
 
@@ -1315,16 +1321,20 @@ namespace Peach.Core.Analyzers
 			{
 				if (e.InnerException != null)
 				{
+
 					throw new PeachException(string.Format(
 						"Error, unable to create instance of '{0}' named '{1}'.\nExtended error: Exception during object creation: {2}",
 						pluginType, cls, e.InnerException.Message
 					));
+
 				}
+
 
 				throw new PeachException(string.Format(
 					"Error, unable to create instance of '{0}' named '{1}'.\nExtended error: Exception during object creation: {2}",
 					pluginType, cls, e.InnerException.Message
 				), e);
+
 			}
 		}
 
@@ -1764,13 +1774,19 @@ namespace Peach.Core.Analyzers
 			test.name = node.getAttrString("name");
 
 			if (node.hasAttr("waitTime"))
+
 				test.waitTime = decimal.Parse(node.getAttrString("waitTime"));
 
+
 			if (node.hasAttr("faultWaitTime"))
+
 				test.faultWaitTime = decimal.Parse(node.getAttrString("faultWaitTime"));
 
+
 			if (node.hasAttr("controlIteration"))
+
 				test.controlIteration = int.Parse(node.getAttrString("controlIteration"));
+
 
 			if (node.hasAttr("replayEnabled"))
 				test.replayEnabled = node.getAttrBool("replayEnabled");
@@ -1789,7 +1805,9 @@ namespace Peach.Core.Analyzers
 					var attr = child.getAttr("ref", null);
 
 					if (attr != null)
+
 						attr = string.Format("//{0}", attr);
+
 					else
 						attr = child.getAttr("xpath", null);
 
@@ -1805,7 +1823,9 @@ namespace Peach.Core.Analyzers
 					var attr = child.getAttr("ref", null);
 
 					if (attr != null)
+
 						attr = string.Format("//{0}", attr);
+
 					else
 						attr = child.getAttr("xpath", null);
 
@@ -1875,7 +1895,9 @@ namespace Peach.Core.Analyzers
 						int i = 0;
 						name = "Pub";
 						while (test.publishers.ContainsKey(name))
+
 							name = "Pub_" + (++i).ToString();
+
 					}
 
 					var pub = handlePlugin<Publisher, PublisherAttribute>(child, null, false);
@@ -1948,16 +1970,20 @@ namespace Peach.Core.Analyzers
 			if (missing != null)
 			{
 				throw new PeachException(
+
 					string.Format("Error, {0} '{1}' is missing required parameter '{2}'.\n{3}",
 						pluginType, name, missing, formatParameterAttributes(objParams)));
+
 			}
 
 			var extra = xmlParameters.Select(kv => kv.Key).Where(k => null == objParams.FirstOrDefault(a => a.name == k)).FirstOrDefault();
 			if (extra != null)
 			{
 				throw new PeachException(
+
 					string.Format("Error, {0} '{1}' has unknown parameter '{2}'.\n{3}",
 						pluginType, name, extra, formatParameterAttributes(objParams)));
+
 			}
 		}
 

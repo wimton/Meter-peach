@@ -24,7 +24,7 @@ namespace Peach.Core.Transformers.HDLC
 
         protected override BitStream internalDecode(BitStream data)
         {
-            return null;// codec.Encode((BitwiseStream)data);
+            return null;//codec.Encode((BitwiseStream)data);
         }
 
 

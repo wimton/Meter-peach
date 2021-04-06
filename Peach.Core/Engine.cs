@@ -467,20 +467,24 @@ namespace Peach.Core
 							{
 								if (context.controlRecordingActionsExecuted.Count != context.controlActionsExecuted.Count)
 								{
+
 									string description = string.Format(@"The Peach control iteration performed failed
 to execute same as initial control.  Number of actions is different. {0} != {1}",
 										context.controlRecordingActionsExecuted.Count,
 										context.controlActionsExecuted.Count);
+
 
 									logger.Debug(description);
 									OnControlFault(context, iterationCount, description);
 								}
 								else if (context.controlRecordingStatesExecuted.Count != context.controlStatesExecuted.Count)
 								{
+
 									string description = string.Format(@"The Peach control iteration performed failed
 to execute same as initial control.  Number of states is different. {0} != {1}",
 										context.controlRecordingStatesExecuted.Count,
 										context.controlStatesExecuted.Count);
+
 
 									logger.Debug(description);
 									OnControlFault(context, iterationCount, description);
@@ -647,7 +651,9 @@ to execute same as initial control.  State " + state.name + "was not performed."
 							if (context.config.parallel)
 							{
 								if (iterationTotal < context.config.parallelTotal)
+
 									throw new PeachException(string.Format("Error, {1} parallel machines is greater than the {0} total iterations.", iterationTotal, context.config.parallelTotal));
+
 
 								var range = Utilities.SliceRange(1, iterationStop, context.config.parallelNum, context.config.parallelTotal);
 

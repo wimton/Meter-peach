@@ -157,7 +157,9 @@ namespace Peach.Core.Dom
 				if (m.Success)
 				{
 					name = m.Groups[1].Value;
+
 					int index = int.Parse(m.Groups[2].Value);
+
 
 					if (!container.ContainsKey(name))
 						throw new PeachException("Error, unable to resolve field \"" + field + "\" against \"" + model.fullName + "\".");

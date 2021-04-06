@@ -20,11 +20,15 @@ namespace Peach.Core.Dom.Actions
 
 			if (!parent.parent.states.TryGetValue(reference, out newState))
 			{
+
 				logger.Debug("Error, unable to locate state '{0}'", reference);
+
 				throw new PeachException("Error, unable to locate state '" + reference + "' provided to action '" + name + "'");
 			}
 
+
 			logger.Debug("Changing to state: {0}", reference);
+
 			throw new ActionChangeStateException(newState);
 		}
 	}

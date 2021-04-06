@@ -58,10 +58,14 @@ namespace Peach.Core.Transformers.Encode
                     b == 32 || b == 44 || b == 46)
                     writer.WriteByte((byte)b);
                 else if (b <= 127)
+
                     writer.WriteString(string.Format("\\x{0:X2}", b));
+
                 else
                     //NOTE: Doing at ASCII byte level.. might not not be necesarry here as the string is not typed...
+
                     writer.WriteString(string.Format("\\u{0:X4}", b));
+
             }
 
             ret.Seek(0, System.IO.SeekOrigin.Begin);

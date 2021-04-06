@@ -129,9 +129,13 @@ namespace Peach.Core.MutationStrategies
 			: base(args)
 		{
 			if (args.ContainsKey("SwitchCount"))
+
 				switchCount = int.Parse((string)args["SwitchCount"]);
+
 			if (args.ContainsKey("MaxFieldsToMutate"))
+
 				maxFieldsToMutate = int.Parse((string)args["MaxFieldsToMutate"]);
+
 		}
 
 		public override void Initialize(RunContext context, Engine engine)
@@ -315,7 +319,9 @@ namespace Peach.Core.MutationStrategies
 					catch (PeachException ex)
 					{
 						logger.Debug(ex.Message);
+
 						logger.Debug("Unable to apply data '{0}', removing from sample list.", opt.name);
+
 						val.Options.Remove(opt);
 					}
 				}

@@ -152,7 +152,9 @@ namespace Peach.Core.Analysis
 					{
 						cov.Run(sampleFile, traceFile);
 						ret.Add(traceFile);
+
 						logger.Debug("Successfully created trace {0}", traceFile);
+
 						OnTraceCompleted(sampleFile, i + 1, sampleFiles.Length);
 					}
 					catch (Exception ex)

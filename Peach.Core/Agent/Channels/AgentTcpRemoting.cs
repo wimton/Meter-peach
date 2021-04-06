@@ -237,7 +237,9 @@ namespace Peach.Core.Agent.Channels
 
 		public override Publisher CreatePublisher(string cls, Dictionary<string, Variant> args)
 		{
+
 			logger.Trace("CreatePublisher: {0}", cls);
+
 
 			OnCreatePublisherEvent(cls, args);
 
@@ -275,7 +277,9 @@ namespace Peach.Core.Agent.Channels
 
 		public override void StopMonitor(string name)
 		{
+
 			logger.Trace("AgentConnect: {0}", name);
+
 			OnStopMonitorEvent(name);
 			PerformRemoting(delegate() { proxy.StopMonitor(name); });
 		}
@@ -381,7 +385,9 @@ namespace Peach.Core.Agent.Channels
 
 		public override Variant Message(string name, Variant data)
 		{
+
 			logger.Trace("Message: {0}", name);
+
 			OnMessageEvent(name, data);
 			
 			Variant ret = null;
@@ -424,7 +430,9 @@ namespace Peach.Core.Agent.Channels
 
 		public Publisher CreatePublisher(string cls, IEnumerable<KeyValuePair<string, Variant>> args)
 		{
+
 			logger.Trace("CreatePublisher: {0}", cls);
+
 			return agent.CreatePublisher(cls, args);
 		}
 
@@ -442,7 +450,9 @@ namespace Peach.Core.Agent.Channels
 
 		public void StopMonitor(string name)
 		{
+
 			logger.Trace("AgentConnect: {0}", name);
+
 			agent.StopMonitor(name);
 		}
 
@@ -496,13 +506,17 @@ namespace Peach.Core.Agent.Channels
 
 		public Variant Message(string name, Variant data)
 		{
+
 			logger.Trace("Message: {0}", name);
+
 			return agent.Message(name, data);
 		}
 
 		public object QueryMonitors(string query)
 		{
+
 			logger.Trace("QueryMonitors: {0}", query);
+
 			return agent.QueryMonitors(query);
 		}
 	}
@@ -522,7 +536,9 @@ namespace Peach.Core.Agent.Channels
 			int port = 9001;
 
 			if (args.ContainsKey("port"))
+
 				port = int.Parse(args["port"]);
+
 
 			//select channel to communicate
 			IDictionary props = new Hashtable() as IDictionary;

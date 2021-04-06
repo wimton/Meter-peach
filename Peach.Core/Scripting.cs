@@ -145,17 +145,23 @@ namespace Peach.Core
 				if (obj != null && obj.GetType() == typeof(BigInteger))
 				{
                     BigInteger bint = (BigInteger)obj;
+
                     String sint = bint.ToString();
+
 					uint ui32;
 					ulong ui64;
                     if (bint.BitLength < 33)
                     {
+
                         ui32 = System.Convert.ToUInt32(sint);
+
                         return ui32;
                     }
                     if (bint.BitLength < 65)
                     {
+
                         ui64 = System.Convert.ToUInt64(sint);
+
                         return ui64;
                     }
                 }

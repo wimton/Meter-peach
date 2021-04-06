@@ -58,7 +58,9 @@ namespace Peach.Core
 			}
 
 			sb.Append("_");
+
 			sb.Append(context.config.runDateTime.ToString("yyyyMMddHHmmss"));
+
 
 			return sb.ToString();
 		}

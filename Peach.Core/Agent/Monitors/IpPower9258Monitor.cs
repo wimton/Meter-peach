@@ -80,7 +80,9 @@ namespace Peach.Core.Agent.Monitors
           StringBuilder sb = new StringBuilder();
           for (int i = 0; i < hash.Length; i++)
           {
+
             sb.Append(hash[i].ToString("x2"));
+
           }
 
           // Make final web requests
@@ -90,7 +92,9 @@ namespace Peach.Core.Agent.Monitors
           string postData = "Username=" + _user + "&Response=" + sb.ToString() + "&Challenge=&Password=";
 
           string prepend = "";
+
           for (int i = 0; i < Convert.ToInt32(_port) - 1; i++)
+
           {
             prepend += "P60=On&P60_TS=0&P60_TC=On&";
           }

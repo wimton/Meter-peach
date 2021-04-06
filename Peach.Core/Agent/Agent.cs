@@ -210,7 +210,9 @@ namespace Peach.Core.Agent
 
 		public Publisher CreatePublisher(string cls, Dictionary<string, Variant> args)
 		{
+
 			logger.Trace("CreatePublisher: {0}", cls);
+
 			OnCreatePublisherEvent(cls, args);
 
 			var type = ClassLoader.FindTypeByAttribute<PublisherAttribute>((x, y) => y.Name == cls);
@@ -262,7 +264,9 @@ namespace Peach.Core.Agent
 
 		public void StopMonitor(string name)
 		{
+
 			logger.Debug("StopMonitor: {0}", name);
+
 			OnStopMonitorEvent(name);
 			monitors[name].StopMonitor();
 			monitors.Remove(name);
@@ -412,7 +416,9 @@ namespace Peach.Core.Agent
 
 		public Variant Message(string name, Variant data)
 		{
+
 			logger.Trace("Message: {0}", name);
+
 			OnMessageEvent(name, data);
 
 			Variant ret = null;
@@ -443,7 +449,9 @@ namespace Peach.Core.Agent
 		/// <returns>Query response or null</returns>
 		public object QueryMonitors(string query)
 		{
+
 			logger.Trace("Message: {0}", query);
+
 			object ret = null;
 
 			foreach (Monitor monitor in monitors.Values)

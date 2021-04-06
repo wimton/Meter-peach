@@ -33,9 +33,11 @@ namespace Peach.Core.Fixups
     [Description("DER encoded length")]
     [Fixup("Asn1Length", true)]
     [Parameter("ref", typeof(DataElement), "Reference to data element")]
+    [Parameter("DER", typeof(bool), "DER encoding of length", "false")]
     [Serializable]
     public class Asn1LengthFixup : Fixup
     {
+        public bool DER { get; protected set; }
         public Asn1LengthFixup(DataElement parent, Dictionary<string, Variant> args)
             : base(parent, args, "ref")
         {
@@ -46,7 +48,7 @@ namespace Peach.Core.Fixups
             var from = elements["ref"];
             var data = from.Value;
             byte[] asnlen;
-            long len = 0;
+            long len;
             try
             {
                 data.Seek(0, System.IO.SeekOrigin.Begin);
@@ -56,7 +58,7 @@ namespace Peach.Core.Fixups
             {
                 len = 0;
             }
-            if (len < 128)
+            if ((len < 128) && !DER)
             {
                 asnlen = new byte[1];
                 if (len > 0)
@@ -66,26 +68,35 @@ namespace Peach.Core.Fixups
             }
             else
             {
-                if (len < 256)
+                if ((len < 256) && !DER)
                 {
                     asnlen = new byte[2];
                     asnlen[0] = 0x81;
                     asnlen[1] = (byte)len;
-                } else
+                }
+                else
                 {
-                    asnlen = new byte[3];
-                    asnlen[0] = 0x82;
-                    asnlen[1] = (byte)(len/255);
-                    asnlen[2] = (byte)(len % 256);
-                } // TODO: more than 65500 long
+                    if ((len < 0x10000) && !DER)
+                    {
+                        asnlen = new byte[3];
+                        asnlen[0] = 0x82;
+                        asnlen[1] = (byte)(len / 256);
+                        asnlen[2] = (byte)(len % 256);
+                    }
+                    else
+                    {
+                        asnlen = new byte[4];
+                        asnlen[0] = 0x83;
+                        asnlen[1] = (byte)((len / 0x10000) % 256);
+                        asnlen[2] = (byte)((len / 256) % 256);
+                        asnlen[3] = (byte)(len % 256);
+                    }
+                }
             }
-
             if (parent is Dom.String)
                 return new Variant(asnlen.ToString());
-
             if (parent is Dom.Array)
                 return new Variant(asnlen);
-
             return new Variant(new BitStream(asnlen));
         }
     }

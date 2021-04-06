@@ -1,0 +1,12 @@
+Peach Fuzzing Run
+=================
+
+Date of run: 13.01.2020 10:36:09
+Peach Version: 0.0.0.0
+Seed: 46005
+Command line: -1 --debug h4.xml 
+Pit File: h4.xml
+. Test starting: Default
+
+. Iteration 1 : 13.01.2020 10:36:10
+. Test finished: Default

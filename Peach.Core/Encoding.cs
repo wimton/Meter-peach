@@ -164,7 +164,11 @@ namespace Peach.Core
 			{
 				string chr_fmt = ch > ushort.MaxValue ? "X8" : "X4";
 				string msg_fmt = "Unable to translate Unicode character \\u{0} at index {1} to the specified code page";
+
+
 				string msg = string.Format(msg_fmt, ((int)ch).ToString(chr_fmt), index);
+
+
 				throw new EncoderFallbackException(msg);
 			}
 		}

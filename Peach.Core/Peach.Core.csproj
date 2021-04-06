@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" />
+  <Import Project="..\packages\Microsoft.NetFramework.Analyzers.2.9.8\build\Microsoft.NetFramework.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.8\build\Microsoft.NetFramework.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.NetCore.Analyzers.2.9.8\build\Microsoft.NetCore.Analyzers.props" Condition="Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.8\build\Microsoft.NetCore.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\build\Microsoft.CodeQuality.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\build\Microsoft.CodeQuality.Analyzers.props')" />
+  <Import Project="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +17,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -158,6 +165,8 @@
     <Compile Include="Fixups\Asn1LengthFixup.cs" />
     <Compile Include="Fixups\CMACFixup.cs" />
     <Compile Include="Fixups\GMACFixup.cs" />
+    <Compile Include="Fixups\SignatureFixup.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IWeighted.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LSFR.cs" />
@@ -184,19 +193,29 @@
     <Compile Include="SubProcess.cs" />
     <Compile Include="TinyMT32.cs" />
     <Compile Include="Transformer.cs" />
-    <Compile Include="Transformers\asn1\Codec.cs" />
+    <Compile Include="Transformers\asn1\Asn1Codec.cs" />
     <Compile Include="Transformers\asn1\DerEncodeBitString.cs" />
+    <Compile Include="Transformers\asn1\DerEncodeExplicit.cs" />
     <Compile Include="Transformers\asn1\DerEncodeIa5String.cs" />
     <Compile Include="Transformers\asn1\DerEncodeInteger.cs" />
     <Compile Include="Transformers\asn1\DerEncodeOctetString.cs" />
     <Compile Include="Transformers\asn1\DerEncodeOid.cs" />
     <Compile Include="Transformers\asn1\DerEncodePrintableString.cs" />
+    <Compile Include="Transformers\asn1\DerEncodeSequence.cs" />
+    <Compile Include="Transformers\Compress\HPACKSInteger.cs" />
+    <Compile Include="Transformers\Compress\HpackUtils.cs" />
+    <Compile Include="Transformers\Compress\Huffman.cs" />
+    <Compile Include="Transformers\Compress\HuffmanDecoder.cs" />
+    <Compile Include="Transformers\Compress\HuffmanEncoder.cs" />
+    <Compile Include="Transformers\Compress\HuffmanTransformer.cs" />
     <Compile Include="Transformers\Crypto\AesCbc.cs" />
+    <Compile Include="Transformers\Crypto\AesEcb.cs" />
     <Compile Include="Transformers\Crypto\AesGcm.cs" />
     <Compile Include="Transformers\Crypto\AesKw.cs" />
     <Compile Include="Transformers\Encode\HdlcCodec.cs" />
     <Compile Include="Transformers\Encode\HdlcFrameDecode.cs" />
     <Compile Include="Transformers\Encode\HdlcFrameEncode.cs" />
+    <Compile Include="Transformers\Encode\TLSencode.cs" />
     <Compile Include="Usage.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Variant.cs" />
@@ -406,7 +425,7 @@
     <Compile Include="Transformers\Crypto\Sha1.cs" />
     <Compile Include="Transformers\Crypto\Sha256.cs" />
     <Compile Include="Transformers\Crypto\SymmetricAlgorithmTransformer.cs" />
-    <Compile Include="Transformers\Crypto\TripleDes.cs" />
+    <Compile Include="Transformers\Crypto\TripleDesCbc.cs" />
     <Compile Include="Transformers\Crypto\UnixCryptTool.cs" />
     <Compile Include="Transformers\Crypto\UnixMd5Crypt.cs" />
     <Compile Include="Transformers\Crypto\UnixMd5CryptTool.cs" />
@@ -431,6 +450,7 @@
     <Compile Include="Xml\ParserRelaxed.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="App.config" />
     <None Include="Lib\ensurepip\_bundled\pip-8.1.1-py2.py3-none-any.whl" />
     <None Include="Lib\ensurepip\_bundled\setuptools-20.10.1-py2.py3-none-any.whl" />
@@ -954,7 +974,17 @@
     <Content Include="Lib\__future__.py" />
     <Content Include="Lib\__phello__.foo.py" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\analyzers\dotnet\cs\Humanizer.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeQuality.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeQuality.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetCore.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetCore.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetCore.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetFramework.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.NetFramework.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)Peach.Core.*" "$(SolutionDir)Peach\bin\debug
@@ -965,6 +995,16 @@ copy "$(TargetDir)Peach.Core.*" "$(SolutionDir)PeachValidator\bin\debug
 copy "$(TargetDir)Peach.Core.*" "$(SolutionDir)PeachNetworkFuzzer\bin\debug
 </PostBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\build\Microsoft.CodeAnalysis.VersionCheckAnalyzer.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\build\Microsoft.CodeQuality.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\build\Microsoft.CodeQuality.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.NetCore.Analyzers.2.9.8\build\Microsoft.NetCore.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetCore.Analyzers.2.9.8\build\Microsoft.NetCore.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.NetFramework.Analyzers.2.9.8\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetFramework.Analyzers.2.9.8\build\Microsoft.NetFramework.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

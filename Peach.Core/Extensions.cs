@@ -22,7 +22,9 @@ namespace Peach.Core
 	{
 		public static string Fmt(this string format, params object[] args)
 		{
+
 			return string.Format(format, args);
+
 		}
 	}
 
@@ -223,7 +225,9 @@ namespace Peach.Core
 
 		private static string getError(XmlNode node, string key)
 		{
+
 			return string.Format("Error, element '{0}' has an invalid value for attribute '{1}'.", node.Name, key);
+
 		}
 
 		private static bool StringToBool(XmlNode node, string name, string value)

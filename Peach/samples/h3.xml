@@ -1,0 +1,84 @@
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<!-- Calculate length in the header+ type byte -->
+<DataModel name="FrameContent">
+	<Number name="Type" size="8" signed="false" value="A0" valueType="hex"/>
+	<Number name="Length" size="8" signed="false" >
+		<Relation type="size" lengthType="bytes" of="FrameData"/>
+  <Blob name="FrameData"/>
+</DataModel>
+
+<DataModel name="FrameData">
+	<Blob name="FrameHeader"/>
+	<Number name="HCS" size="16" signed="false"/>
+		<Fixup name="CRC16" ref="FrameHeader"/> 
+	</Number>
+  <Blob name="FramePayload" minOccurs = "0"/>
+</DataModel>
+
+
+
+<DataModel name="FrameHeader">
+  <Blob name="FrameHeader"/>
+</Number>
+	
+  <Blob name="FramePayload">
+  </Blob>
+</DataModel>
+
+
+<DataModel name="HDLCParameters">
+	<Number name="Type" size="8" signed="false" value="A0" valueType="hex"/>
+	<Number name="Length" size="8" signed="false" >
+		<Relation type="size" lengthType="bytes" of="HDLCParameter"></Relation>
+  </Number>
+  <Blob name="HDLCParameter" minOccurs = "1" maxOccurs="10"/>
+</Number>
+
+<DataModel name="HDLCParameter">
+	<Number name="Type" size="8" signed="false" value="A0" valueType="hex"/>
+	<Number name="Length" size="8" signed="false" >
+		<Relation type="size" lengthType="bytes" of="Value"></Relation>
+	</Number>
+	<Number name="Value" signed="false" />
+</DataModel>
+
+
+
+<!-- Append CRC and escape the content -->
+  <DataModel name="Frame">
+    <Blob name="FrameContent">
+      <Transformer class="HdlcFrameEncode"/>
+    </Blob>
+  </DataModel>   
+
+  <DataModel name="ResponseModel">
+    <Blob name="content">
+      <Transformer class="HdlcFrameDecode"/>
+    </Blob>
+  </DataModel>   
+  
+	<StateModel name="TheStateModel" initialState="InitialState">
+		<State name="InitialState">
+			<Action name="Send" type="output">
+				<DataModel ref="Packet"/>
+			</Action>
+			<Action name="Recv" type="input">
+				<DataModel ref="ResponseModel"/>
+			</Action>
+		</State>
+	</StateModel>
+
+	<Test name="Default">
+		<StateModel ref="TheStateModel"/>
+		<Publisher class="SerialPort">
+			<Param name="PortName" value="COM6"/>
+		</Publisher>
+    <!-- OPTIONAL: Configure a strategy -->
+    <!--<Strategy class="Sequential"/>-->
+    <Logger class="Filesystem">
+      <Param name="Path" value="logs"/>
+    </Logger>   
+	</Test>
+</Peach>

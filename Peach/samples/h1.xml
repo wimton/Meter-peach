@@ -1,0 +1,86 @@
+
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance  
+ xsi:schemaLocation="http://peachfuzzer.com/2012/Peach/peach/peach.xsd">
+<DataModel name="TheDataModel">
+	<String value="" mutable="false"/>
+    <!--<Analyzer class="StringToken"/>-->
+    <!--<String value=""/>-->
+</DataModel>
+<DataModel name="Data">
+    <String value="ABCD!" mutable="false">
+      <!--<Analyzer class="StringToken"/>-->
+    </String>
+    <String value=""/>
+</DataModel>
+<DataModel name="DataHTER">
+    <!--<String value="HTER " mutable="false" token="true"/>-->
+    <!--<Blob name="Payload" length="8" value="01 02 03 04 05 AA BB CC" LengthType="bytes" mutable="false" />-->
+    <!--<String value=""/>-->
+    <Blob lengthType="bytes" value="7e a0 21 00 02 00 23 05 93 4a 20 81 80 12 05 01 ff 06 01 ff 07 04 00 00 00 01 08 04 00 00 00 07 63 79 7e" valueType="hex"/>
+    <!--<String value="\r\n" mutable="false" token="true"/>-->
+</DataModel>
+<DataModel name="DataResponse">
+    <Blob/>
+</DataModel>
+<StateModel name="TheState" initialState="Initial">
+   <State name="Second">
+	<Action type="output" publisher="bat">
+           <DataModel ref="TheDataModel"/>
+        </Action>
+      <Action type="call" method="LaunchViewer" publisher="Peach.Agent"/>
+   </State>
+   <State name="tester">
+      <Action type="output" publisher="single">
+        <DataModel ref="Data" />
+      </Action>
+     <Action type="changeState" ref="Second"/>
+   </State>
+   <State name="Initial">
+      <Action type="output" publisher="network">
+        <DataModel ref="DataHTER" />
+      </Action>
+      <Action type="input" publisher="network">
+        <DataModel ref="DataResponse" />
+      </Action>
+      <Action type="changeState" ref="Second"/>
+   </State>
+</StateModel>
+<!-- The Agent executes the windows batch file 'pivottest.bat' which orchestrates the Japp client tool and concatenates/appends the logs of the results of each iteration in a single log file -->
+	<Agent name="WinAgent">
+		<Monitor class="WindowsDebugger">
+			<Param name="CommandLine" value="C:\pivottest.bat" />
+      <Param name="StartOnCall" value="LaunchViewer"/>
+			<Param name="NoCpuKill" value="true" />
+      <Param name="WaitForExitOnCall" value="true"/>
+      <Param name="WaitForExitTimeout" value="-1"/>
+      <Param name="WinDbgPath" value="C:\Users\achidamb\OneDrive - Itron\internship_tools\Debugging Tools for Windows (x64) v6.12\Debugging Tools for Windows (x64)" />
+    </Monitor>
+	</Agent>
+  <!-- Test defines the File publishers and TCP publisher-->
+	<Test name="Default">
+		<Agent ref="WinAgent" platform="windows"/>
+		 <StateModel ref="TheState"/>
+<!--bat publisher is used to create the batch file pivottest.bat which orchestrates a single iteration-->
+	<Publisher name="bat" class="File">
+			<Param name="FileName" value="C:\pivottest.bat"/>
+      <Param name="Append" value="true"/>
+      <Param name="Overwrite" value="false"/>
+	</Publisher>
+    <!--the single publisher is not used here .. it was used for testing purpose-->
+    <Publisher name="single" class="File">
+      <Param name="FileName" value="tester.txt" />
+    </Publisher>
+<!--the network publisher is used to send the fuzzed tcp payload 'in hdlc frame format' to the ace meter -->
+    <Publisher name="network" class="TcpClient">
+      <Param name="Host" value="172.23.35.161"/>
+      <Param name="Port" value="703"/>
+    </Publisher>
+		<!-- OPTIONAL: Configure a strategy -->
+		<!--<Strategy class="Sequential"/>-->
+		<Logger class="Filesystem">
+			<Param name="Path" value="logs"/>
+		</Logger>
+	</Test>
+</Peach>
+<!-- end -->
+

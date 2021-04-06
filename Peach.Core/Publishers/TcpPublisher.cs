@@ -66,7 +66,9 @@ namespace Peach.Core.Publishers
 			}
 			catch (Exception ex)
 			{
+
 				Logger.Error("open: Error, Unable to start tcp client reader. {0}.", ex.Message);
+
 				throw new SoftException(ex);
 			}
 

@@ -561,7 +561,9 @@ namespace Peach.Core.Agent.Channels
 
 		public override Publisher CreatePublisher(string cls, Dictionary<string, Variant> args)
 		{
+
 			logger.Trace("CreatePublisher: {0}", cls);
+
 			OnCreatePublisherEvent(cls, args);
 			var pub = new RestProxyPublisher(args);
 			pub.Class = cls;
@@ -587,7 +589,9 @@ namespace Peach.Core.Agent.Channels
 
 		public override void StopMonitor(string name)
 		{
+
 			logger.Trace("AgentConnect: {0}", name);
+
 			OnStopMonitorEvent(name);
 			Send("StopMonitor?name=" + name);
 		}
@@ -617,7 +621,11 @@ namespace Peach.Core.Agent.Channels
 		{
 			logger.Trace("IterationStarting: {0}, {1}", iterationCount, isReproduction);
 			OnIterationStartingEvent(iterationCount, isReproduction);
+
+
 			Send("IterationStarting?iterationCount=" + iterationCount.ToString() + "&" + "isReproduction=" + isReproduction.ToString());
+
+
 		}
 
 		public override bool IterationFinished()
@@ -626,7 +634,9 @@ namespace Peach.Core.Agent.Channels
 			OnIterationFinishedEvent();
 			string json = Send("IterationFinished");
 			JsonResponse response = ParseResponse(json);
+
 			return Convert.ToBoolean(response.Status);
+
 		}
 
 		public override bool DetectedFault()
@@ -635,7 +645,9 @@ namespace Peach.Core.Agent.Channels
 			OnDetectedFaultEvent();
 			string json = Send("DetectedFault");
 			JsonResponse response = ParseResponse(json);
+
 			return Convert.ToBoolean(response.Status);
+
 		}
 
 		public override Fault[] GetMonitorData()
@@ -663,12 +675,16 @@ namespace Peach.Core.Agent.Channels
 			OnMustStopEvent();
 			string json = Send("MustStop");
 			JsonResponse response = ParseResponse(json);
+
 			return Convert.ToBoolean(response.Status);
+
 		}
 
 		public override Variant Message(string name, Variant data)
 		{
+
 			logger.Trace("Message: {0}", name);
+
 			OnMessageEvent(name, data);
 			throw new NotImplementedException();
 		}

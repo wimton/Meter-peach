@@ -160,7 +160,9 @@ namespace Peach.Core.Dom
 					state["self"] = From;
 
 					object value = Scripting.EvalExpression(_expressionGet, state);
+
 					offset = Convert.ToInt64(value);
+
 				}
 
 				return offset;
@@ -198,7 +200,9 @@ namespace Peach.Core.Dom
 					state["self"] = From;
 
 					object value = Scripting.EvalExpression(_expressionSet, state);
+
 					offset = Convert.ToInt32(value);
+
 				}
 
 				return new Variant(offset);
@@ -226,7 +230,9 @@ namespace Peach.Core.Dom
 				state["self"] = From;
 
 				object newValue = Scripting.EvalExpression(_expressionSet, state);
+
 				offset = Convert.ToInt32(newValue);
+
 			}
 
 			From.DefaultValue = new Variant(offset);
@@ -274,11 +280,13 @@ namespace Peach.Core.Dom
 
 		private void Error(string error)
 		{
+
 			string msg = string.Format(
 				"Error, unable to calculate offset between {0} and {1}, {2}.",
 				From.debugName,
 				Of.debugName,
 				error);
+
 
 			throw new PeachException(msg);
 		}

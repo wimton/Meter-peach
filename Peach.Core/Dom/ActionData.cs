@@ -83,9 +83,13 @@ namespace Peach.Core.Dom
 			get
 			{
 				if (name == null)
+
 					return string.Format("{0}.{1}", action.parent.name, action.name);
+
 				else
+
 					return string.Format("{0}.{1}.{2}", action.parent.name, action.name, name);
+
 			}
 		}
 
@@ -97,9 +101,13 @@ namespace Peach.Core.Dom
 			get
 			{
 				if (name == null)
+
 					return string.Format("{0}.{1}", action.parent.name, action.name);
+
 				else
+
 					return string.Format("{0}.{1}.{2}", action.parent.name, action.name, name);
+
 			}
 		}
 
@@ -206,7 +214,9 @@ namespace Peach.Core.Dom
 		{
 			get
 			{
+
 				return string.Format("Run_{0}.{1}", action.parent.runCount, modelName);
+
 			}
 		}
 

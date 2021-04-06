@@ -14,7 +14,7 @@ using NLog;
 using Peach;
 using Peach.Core.IO;
 using System.ComponentModel;
-
+#pragma warning disable CA1305 // Specify IFormatProvider
 namespace Peach.Core.Publishers
 {
 	public abstract class SocketPublisher : Publisher
@@ -162,6 +162,7 @@ namespace Peach.Core.Publishers
 				throw new PeachException("Could not resolve scope id for interface with address '" + ip + "'.");
 
 			if (results.Count != 1)
+
 				throw new PeachException(string.Format("Found multiple interfaces with address '{0}'.{1}\t{2}",
 					ip, Environment.NewLine,
 					string.Join(Environment.NewLine + "\t", results.Select( a => a.Item1.ToString() + " -> " + a.Item2.ToString()))));
@@ -547,8 +548,8 @@ namespace Peach.Core.Publishers
 				SocketException se = ex as SocketException;
 				if (se != null && se.SocketErrorCode == SocketError.AccessDenied)
 					throw new PeachException(string.Format("Access denied when trying open a {0} socket.  Ensure the user has the appropriate permissions.", _type), ex);
-
-				Logger.Error("Unable to open {0} socket to {1}:{2}. {3}.", _type, Host, Port, ex.Message);
+				
+                Logger.Error("Unable to open {0} socket to {1}:{2}. {3}.", _type, Host, Port, ex.Message);
 
 				throw new SoftException(ex);
 			}
@@ -691,13 +692,16 @@ namespace Peach.Core.Publishers
 			{
 				if (ex is TimeoutException)
 				{
+
 					Logger.Debug("{0} packet not sent to {1}:{2} in {3}ms, timing out.",
 						_type, Host, Port, Timeout);
 				}
 				else
 				{
+
 					Logger.Error("Unable to send {0} packet to {1}:{2}. {3}",
 						_type, Host, Port, ex.Message);
+
 				}
 
 				throw new SoftException(ex);
@@ -710,7 +714,9 @@ namespace Peach.Core.Publishers
 			{
 				if (_mtu == null)
 				{
+
 					Logger.Debug("MTU of '{0}' is unknown.", _iface);
+
 					return null;
 				}
 
@@ -790,7 +796,9 @@ namespace Peach.Core.Publishers
 				}
 				else
 				{
+
 					Logger.Debug("Not setting MTU of '{0}', value is out of range.", _iface);
+
 				}
 			}
 		}

@@ -11,7 +11,7 @@ using Peach.Core.Analyzers;
 namespace Peach.Core.Test.Transformers.Crypto
 {
     [TestFixture]
-    class AesCBCTests : DataModelCollector
+    class AesCbcTests : DataModelCollector
     {
 
         [Test]

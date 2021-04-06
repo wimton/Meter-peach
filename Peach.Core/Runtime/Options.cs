@@ -203,8 +203,10 @@ namespace Peach.Core.Runtime {
 				throw new ArgumentOutOfRangeException ("index");
 			if (c.Option.OptionValueType == OptionValueType.Required &&
 					index >= values.Count)
+
 				throw new OptionException (string.Format (
 							c.OptionSet.MessageLocalizer ("Missing required value for option '{0}'."), c.OptionName), 
+
 						c.OptionName);
 		}
 
@@ -312,7 +314,9 @@ namespace Peach.Core.Runtime {
 						"maxValueCount");
 			if (this.type == OptionValueType.None && maxValueCount > 1)
 				throw new ArgumentException (
+
 						string.Format ("Cannot provide maxValueCount of {0} for OptionValueType.None.", maxValueCount),
+
 						"maxValueCount");
 			if (Array.IndexOf (names, "<>") >= 0 && 
 					((names.Length == 1 && this.type != OptionValueType.None) ||
@@ -349,9 +353,11 @@ namespace Peach.Core.Runtime {
 			}
 			catch (Exception e) {
 				throw new OptionException (
+
 						string.Format (
 							c.OptionSet.MessageLocalizer ("Could not convert string `{0}' to type {1} for option `{2}'."),
 							value, typeof (T).Name, c.OptionName),
+
 						c.OptionName, e);
 			}
 			return t;
@@ -379,7 +385,9 @@ namespace Peach.Core.Runtime {
 					type = name [end];
 				else 
 					throw new ArgumentException (
+
 							string.Format ("Conflicting option types: '{0}' vs. '{1}'.", type, name [end]),
+
 							"prototype");
 				AddSeparators (name, end, seps);
 			}
@@ -389,7 +397,9 @@ namespace Peach.Core.Runtime {
 
 			if (count <= 1 && seps.Count != 0)
 				throw new ArgumentException (
+
 						string.Format ("Cannot provide key/value separators for Options taking {0} value(s).", count),
+
 						"prototype");
 			if (count > 1) {
 				if (seps.Count == 0)
@@ -411,27 +421,35 @@ namespace Peach.Core.Runtime {
 					case '{':
 						if (start != -1)
 							throw new ArgumentException (
+
 									string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+
 									"prototype");
 						start = i+1;
 						break;
 					case '}':
 						if (start == -1)
 							throw new ArgumentException (
+
 									string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+
 									"prototype");
 						seps.Add (name.Substring (start, i-start));
 						start = -1;
 						break;
 					default:
 						if (start == -1)
+
 							seps.Add (name [i].ToString ());
+
 						break;
 				}
 			}
 			if (start != -1)
 				throw new ArgumentException (
+
 						string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+
 						"prototype");
 		}
 
@@ -828,9 +846,11 @@ namespace Peach.Core.Runtime {
 					c.Option.OptionValueType == OptionValueType.Optional)
 				c.Option.Invoke (c);
 			else if (c.OptionValues.Count > c.Option.MaxValueCount) {
+
 				throw new OptionException (localizer (string.Format (
 								"Error: Found {0} option values when expecting {1}.", 
 								c.OptionValues.Count, c.Option.MaxValueCount)),
+
 						c.OptionName);
 			}
 		}
@@ -858,13 +878,19 @@ namespace Peach.Core.Runtime {
 				return false;
 			for (int i = 0; i < n.Length; ++i) {
 				Option p;
+
 				string opt = f + n [i].ToString ();
+
+
 				string rn = n [i].ToString ();
+
 				if (!Contains (rn)) {
 					if (i == 0)
 						return false;
+
 					throw new OptionException (string.Format (localizer (
 									"Cannot bundle unregistered option '{0}'."), opt), opt);
+
 				}
 				p = this [rn];
 				switch (p.OptionValueType) {

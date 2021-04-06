@@ -132,7 +132,9 @@ namespace Peach.Core.Mutators
                 {
                     try
                     {
+
                         n = Int32.Parse(h.Value);
+
                     }
                     catch (Exception ex)
                     {
@@ -189,7 +191,9 @@ namespace Peach.Core.Mutators
             {
                 long value = (long)obj.DefaultValue + values[currentCount];
                 if (obj is Dom.String)
+
                     obj.MutatedValue = new Variant(value.ToString());
+
                 else
                     obj.MutatedValue = new Variant(value);
                 obj.mutationFlags = MutateOverride.Default;
@@ -207,7 +211,9 @@ namespace Peach.Core.Mutators
                 }
 
                 if (obj is Dom.String)
+
                     obj.MutatedValue = new Variant(value.ToString());
+
                 else
                     obj.MutatedValue = new Variant(value);
                 obj.mutationFlags = MutateOverride.Default;
@@ -226,7 +232,9 @@ namespace Peach.Core.Mutators
                 {
                     long finalValue = (long)obj.DefaultValue + value;
                     if (obj is Dom.String)
+
                         obj.MutatedValue = new Variant(finalValue.ToString());
+
                     else
                         obj.MutatedValue = new Variant(finalValue);
                     obj.mutationFlags = MutateOverride.Default;
@@ -237,7 +245,9 @@ namespace Peach.Core.Mutators
                     {
                         ulong finalValue = (ulong)obj.DefaultValue - (ulong)-value;
                         if (obj is Dom.String)
+
                             obj.MutatedValue = new Variant(finalValue.ToString());
+
                         else
                             obj.MutatedValue = new Variant(finalValue);
                         obj.mutationFlags = MutateOverride.Default;
@@ -246,7 +256,9 @@ namespace Peach.Core.Mutators
                     {
                         ulong finalValue = (ulong)obj.DefaultValue + (ulong)value;
                         if (obj is Dom.String)
+
                             obj.MutatedValue = new Variant(finalValue.ToString());
+
                         else
                             obj.MutatedValue = new Variant(finalValue);
                         obj.mutationFlags = MutateOverride.Default;

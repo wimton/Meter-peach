@@ -9,35 +9,41 @@ using Peach.Core.IO;
 namespace Peach.Core.Transformers.asn1
 {
     [Description("Encode on output as ASN.1 octet string.")]
-    [Parameter("pad", typeof(int), "Padding length", "0")]
+    [Parameter("Pad", typeof(int), "Padding length", "0")]
     [Transformer("DerEncodeBitString", true)]
     [Transformer("asn1.DerEncodeBitString")]
+    [Parameter("tagClass", typeof(Asn1Codec.tagClass), "tagClass [ Universal, Application, Context, Private]", "Universal")]
+
     [Serializable]
     public class DerEncodeBitString : Transformer
     {
-        Codec codec = new Codec(); 
-        Dictionary<string, Variant> m_args;
+        public Asn1Codec.tagClass tagClass { get; protected set; }
+        public int Pad { get; protected set; }
         public DerEncodeBitString(Dictionary<string, Variant> args) : base(args)
         {
-            m_args = args;
+            ParameterParser.Parse(this, args);
         }
 
         protected override BitwiseStream internalEncode(BitwiseStream data)
         {
-            int paddinglength = 0;
-            try
-            {
-                if (m_args.ContainsKey("pad"))
-                {
-                    paddinglength = Int16.Parse((string)m_args["pad"]);
-                }
-            }
-            catch (Exception e)
-            { }
-            int len = (int)data.Length+1; // + padding 
-            byte[] input = new BitReader(data).ReadBytes(len);
             var ret = new BitStream();
+            if (data == null)
+            {
+                ret.WriteByte(0x05);
+                ret.WriteByte(0x00);
+                return ret;
+            }
+            int paddinglength = Pad;
+            int len = (int)data.Length+1; // + padding 
+            BitReader br = new BitReader(data);
+            byte[] input = br.ReadBytes(len);
+            br.Dispose();
             ret.WriteByte(0x03);
+            if (len == 0)
+            {
+                ret.WriteByte(0);
+                return ret;
+            }
             if (len > 127) // TODO: > 32000 long
             {
                 if (len > 255)
@@ -53,7 +59,6 @@ namespace Peach.Core.Transformers.asn1
                         ret.WriteByte((byte)((len >> 16) & 0xFF));
                         ret.WriteByte((byte)((len >> 8) & 0xFF));
                     }
-
                 }
             }
             ret.WriteByte((byte)(len & 0xFF));
@@ -67,10 +72,14 @@ namespace Peach.Core.Transformers.asn1
 
         protected override BitStream internalDecode(BitStream data)
         {
+            BitStream ret = new BitStream();
+            if (data==null)
+                return null;
             int len = (int)data.Length;
             int offset = 0;
-            byte[] input = new BitReader(data).ReadBytes(len);
-            var ret = new BitStream();
+            BitReader br = new BitReader(data);
+            byte[] input = br.ReadBytes(len);
+            br.Dispose();
             if (input[offset++] != 0x03)
             {
                 throw new SoftException("Not an ASN.1 Bit string.");

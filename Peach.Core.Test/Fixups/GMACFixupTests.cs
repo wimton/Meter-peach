@@ -15,6 +15,33 @@ namespace Peach.Core.Test.Fixups
     class GMACFixupTests : DataModelCollector
     {
         [Test]
+        public void KeySize128Ex1()
+        {
+            // From: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_GCM.pdf
+            RunTest1("", 
+                "FEFFE9928665731C6D6A8F9467308308", 
+                "CAFEBABEFACEDBADDECAF888", 
+                "3247184B3C4F69A44DBCD22887BBB418");
+        }
+        [Test]
+        public void KeySize128Ex2()
+        {
+            // From: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_GCM.pdf
+            RunTest1("3AD77BB40D7A3660A89ECAF32466EF97F5D3D58503B9699DE785895A96FDBAAF43B1CD7F598ECE23881B00E3ED0306887B0C785E27E8AD3F8223207104725DD4", 
+                "FEFFE9928665731C6D6A8F9467308308", 
+                "CAFEBABEFACEDBADDECAF888", 
+                "5F91D77123EF5EB9997913849B8DC1E9");
+        }
+
+        [Test]
+        public void KeySize256Ex1()
+        {        
+            // standard test
+            RunTest1("3AD77BB40D7A3660A89ECAF32466EF97F5D3D58503B9699DE785895A96FDBAAF43B1CD7F598ECE23881B00E3ED0306887B0C785E27E8AD3F8223207104725DD4",
+                "FEFFE9928665731C6D6A8F9467308308FEFFE9928665731C6D6A8F9467308308", 
+                "CAFEBABEFACEDBADDECAF888", "DE34B6DCD4CEE2FDBEC3CEA01AF1EE44");
+        }
+        [Test]
         public void KeySize128Test00()
         {
             // standard test
@@ -71,7 +98,7 @@ namespace Peach.Core.Test.Fixups
             Assert.AreEqual(precalcChecksum, values[0].ToArray());
         }
 
-        [Test, ExpectedException(typeof(PeachException), ExpectedMessage = "Error, unable to create instance of 'Fixup' named 'GMAC'.\nExtended error: Exception during object creation: The truncate length is greater than the hash size for the specified algorithm.")]
+        [Test, ExpectedException(typeof(PeachException), ExpectedMessage = "Error, unable to create instance of 'Fixup' named 'GMAC'.\nExtended error: Exception during object creation: The truncate length is greater than the block size for the specified algorithm.")]
         public void LengthGreaterThanHashSizeTest()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
@@ -165,7 +192,7 @@ namespace Peach.Core.Test.Fixups
                 "                <Param name =\"Length\" value=\"16\"/>" +
                   "           </Fixup>" +
                 "       </Blob>" +
-                "       <Blob name=\"Data\" value=\"{0}\"/>" +
+                "       <Blob name=\"Data\" valueType=\"hex\"  value=\"{0}\"/>" +
                 "   </DataModel>" +
                 "   <StateModel name=\"TheState\" initialState=\"Initial\">" +
                 "       <State name=\"Initial\">" +

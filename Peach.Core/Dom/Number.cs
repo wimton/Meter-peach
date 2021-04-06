@@ -105,7 +105,9 @@ namespace Peach.Core.Dom
 				int size = node.getAttrInt("size");
 
 				if (size < 1 || size > 64)
+
 					throw new PeachException(string.Format("Error, unsupported size '{0}' for {1}.", size, num.debugName));
+
 
 				num.lengthType = LengthType.Bits;
 				num.length = size;
@@ -132,7 +134,9 @@ namespace Peach.Core.Dom
 						break;
 					default:
 						throw new PeachException(
+
 							string.Format("Error, unsupported value '{0}' for 'endian' attribute on {1}.", strEndian, num.debugName));
+
 				}
 			}
 
@@ -228,19 +232,25 @@ namespace Peach.Core.Dom
 					return value;
 			}
 
+
 			throw new PeachException(string.Format("Error, {0} value '{1}' could not be converted to a {2}-bit {3} number.", debugName, str, lengthAsBits, Signed ? "signed" : "unsigned"));
+
 		}
 
 		private dynamic SanitizeStream(BitwiseStream bs)
 		{
 			if (bs.LengthBits < lengthAsBits || (bs.LengthBits + 7) / 8 != (lengthAsBits + 7) / 8)
+
 				throw new PeachException(string.Format("Error, {0} value has an incorrect length for a {1}-bit {2} number, expected {3} bytes.", debugName, lengthAsBits, Signed ? "signed" : "unsigned", (lengthAsBits + 7) / 8));
+
 
 			ulong extra;
 			bs.ReadBits(out extra, (int)(bs.LengthBits - lengthAsBits));
 
 			if (extra != 0)
+
 				throw new PeachException(string.Format("Error, {0} value has an invalid bytes for a {1}-bit {2} number.", debugName, lengthAsBits, Signed ? "signed" : "unsigned"));
+
 
 			return FromBitstream(bs);
 		}
@@ -275,7 +285,9 @@ namespace Peach.Core.Dom
 		private dynamic DoubleToInteger(double value)
 		{
 			if (Math.Floor(value) != value)
+
 				throw new PeachException(string.Format("Error, {0} value '{1}' can not be converted to a {2}-bit {3} number.", debugName, value, lengthAsBits, Signed ? "signed" : "unsigned"));
+
 
 			if (value < 0)
 			{
@@ -285,7 +297,9 @@ namespace Peach.Core.Dom
 				}
 				catch (OverflowException)
 				{
+
 					throw new PeachException(string.Format("Error, {0} value '{1}' is less than the minimum {2}-bit {3} number.", debugName, value, lengthAsBits, Signed ? "signed" : "unsigned"));
+
 				}
 			}
 			else
@@ -296,7 +310,9 @@ namespace Peach.Core.Dom
 				}
 				catch (OverflowException)
 				{
+
 					throw new PeachException(string.Format("Error, {0} value '{1}' is greater than the maximum {2}-bit {3} number.", debugName, value, lengthAsBits, Signed ? "signed" : "unsigned"));
+
 				}
 			}
 		}

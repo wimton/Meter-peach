@@ -54,8 +54,12 @@ namespace Peach.Core.Transformers.Type
 			{
 
 				string dataAsStr = new BitReader(data).ReadString();
+
 				int dataAsInt = Int32.Parse(dataAsStr);
+
+
 				string dataAsHexStr = dataAsInt.ToString("X");
+
 				var ret = new BitStream();
 				var writer = new BitWriter(ret);
 				writer.WriteString(dataAsHexStr);
@@ -73,8 +77,12 @@ namespace Peach.Core.Transformers.Type
 			try
 			{
 				string dataAsHexStr = new BitReader(data).ReadString();
+
 				int dataAsInt = Int32.Parse(dataAsHexStr, NumberStyles.HexNumber);
+
+
 				string dataAsStr = dataAsInt.ToString();
+
 				var ret = new BitStream();
 				var writer = new BitWriter(ret);
 				writer.WriteString(dataAsStr);

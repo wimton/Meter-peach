@@ -74,18 +74,24 @@ namespace Peach.Core.Fixups
 					return new Variant(strbytes);
 				}
 				else if (value is int)
+
 					return new Variant(Convert.ToInt32(value));
+
 				else
 				{
 					throw new PeachException(
+
 						string.Format("ExpressionFixup expected a return value of string or int but got '{0}'", value.GetType().Name));
+
 				}
 
 			}
 			catch (System.Exception ex)
 			{
 				throw new PeachException(
+
 					string.Format("ExpressionFixup expression threw an exception!\nExpression: {0}\n Exception: {1}", expression, ex.ToString()), ex);
+
 			}
 		}
 	}

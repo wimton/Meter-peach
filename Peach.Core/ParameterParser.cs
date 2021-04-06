@@ -156,7 +156,9 @@ namespace Peach.Core
 		{
 			try
 			{
+
 				return Convert.ChangeType(value, destType);
+
 			}
 			catch (InvalidCastException)
 			{
@@ -226,7 +228,11 @@ namespace Peach.Core
 			var attr = attrs.FirstOrDefault(a => a.IsDefault == true);
 			if (attr == null) attr = attrs.First();
 
+
+
 			string msg = string.Format("{0} '{1}' {2}", attr.Type.Name, attr.Name, string.Format(fmt, args));
+
+
 			throw new PeachException(msg, ex);
 		}
 

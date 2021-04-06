@@ -123,7 +123,9 @@ namespace Peach.Core.Agent.Monitors
 				}
 				catch (Exception ex)
 				{
+
 					logger.Error("_Stop(): {0}", ex.Message);
+
 				}
 			}
 
@@ -173,14 +175,20 @@ namespace Peach.Core.Agent.Monitors
 				}
 				catch (Exception ex)
 				{
+
 					logger.Debug("Error querying cpu time: {0}", ex.Message);
+
 				}
 
 				_Stop();
 			}
 			else
 			{
+
+
 				logger.Debug("WaitForExit({0})", WaitForExitTimeout == -1 ? "INFINITE" : WaitForExitTimeout.ToString());
+
+
 
 				if (!_process.WaitForExit(WaitForExitTimeout))
 				{
