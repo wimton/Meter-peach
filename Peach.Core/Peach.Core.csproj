@@ -212,6 +212,8 @@
     <Compile Include="Transformers\Crypto\AesEcb.cs" />
     <Compile Include="Transformers\Crypto\AesGcm.cs" />
     <Compile Include="Transformers\Crypto\AesKw.cs" />
+    <Compile Include="Transformers\Crypto\Sha256.cs" />
+    <Compile Include="Transformers\Crypto\Sha384.cs" />
     <Compile Include="Transformers\Encode\HdlcCodec.cs" />
     <Compile Include="Transformers\Encode\HdlcFrameDecode.cs" />
     <Compile Include="Transformers\Encode\HdlcFrameEncode.cs" />
@@ -423,7 +425,6 @@
     <Compile Include="Transformers\Crypto\Hmac.cs" />
     <Compile Include="Transformers\Crypto\Md5.cs" />
     <Compile Include="Transformers\Crypto\Sha1.cs" />
-    <Compile Include="Transformers\Crypto\Sha256.cs" />
     <Compile Include="Transformers\Crypto\SymmetricAlgorithmTransformer.cs" />
     <Compile Include="Transformers\Crypto\TripleDesCbc.cs" />
     <Compile Include="Transformers\Crypto\UnixCryptTool.cs" />
